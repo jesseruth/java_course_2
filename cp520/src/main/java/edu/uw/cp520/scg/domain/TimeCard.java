@@ -2,7 +2,9 @@ package edu.uw.cp520.scg.domain;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a time card capable of storing a collection of a consultant's billable and
@@ -11,14 +13,14 @@ import java.util.List;
  * @author Jesse Ruth
  */
 public final class TimeCard {
-    Consultant consultant;
-    LocalDate weekStartingDay;
-    List<ConsultantTime> consultingHours;
-    int billableHours;
+    private final Consultant consultant;
+    private final LocalDate weekStartingDay;
+    private final List<ConsultantTime> consultingHours;
 
     /**
      * Creates a new instance of TimeCard
-     * @param consultant The Consultant whose information this TimeCard records.
+     *
+     * @param consultant      The Consultant whose information this TimeCard records.
      * @param weekStartingDay The date of the first work day of the week this TimeCard records information for.
      */
     public TimeCard(Consultant consultant, LocalDate weekStartingDay) {
@@ -29,6 +31,7 @@ public final class TimeCard {
 
     /**
      * Getter for consultant property.
+     *
      * @return value of consultant property.
      */
     public Consultant getConsultant() {
@@ -37,30 +40,40 @@ public final class TimeCard {
 
     /**
      * Getter for billableHours property.
+     *
      * @return value of billableHours property
      */
     public int getTotalBillableHours() {
-        return billableHours;
+        return consultingHours.stream().filter(ConsultantTime::isBillable)
+                .map(ConsultantTime::getHours)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     /**
      * Getter for totalNonBillableHours property.
+     *
      * @return Value of totalNonBillableHours property
      */
     public int getTotalNonBillableHours() {
-        return 0;
+        return consultingHours.stream().filter(hours -> !hours.isBillable())
+                .map(ConsultantTime::getHours)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     /**
      * Getter for consultingHours property.
+     *
      * @return Value of consultingHours property
      */
     public List<ConsultantTime> getConsultingHours() {
-        return consultingHours;
+        return Collections.unmodifiableList(consultingHours);
     }
 
     /**
      * Add a ConsultantTime object to the collection maintained by this TimeCard.
+     *
      * @param consultantTime The ConsultantTime to add
      */
     public void addConsultantTime(ConsultantTime consultantTime) {
@@ -69,14 +82,19 @@ public final class TimeCard {
 
     /**
      * Getter for totalHours property.
+     *
      * @return Value of totalHours property
      */
     public int getTotalHours() {
-        return 1111;
+        return consultingHours.stream()
+                .map(ConsultantTime::getHours)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     /**
      * Getter for weekStartingDay property.
+     *
      * @return Value of weekStartingDay property.
      */
     public LocalDate getWeekStartingDay() {
@@ -87,29 +105,72 @@ public final class TimeCard {
      * Returns the billable hours (if any) in this TimeCard for the specified Client. Finds all the
      * billable hours in the collection of ConsultantTime objects where the client matched the
      * provided client and returns a new list in containing only these ConsultantTime objects.
+     *
      * @param clientName name of the client to extract hours for.
      * @return list of billable hours for the client.
      */
-    public List<ConsultantTime> getBillableHoursForClient​(String clientName) {
-        return consultingHours;
+    public List<ConsultantTime> getBillableHoursForClient(String clientName) {
+        final ArrayList<ConsultantTime> billableHours = new ArrayList<>();
+        for (final ConsultantTime currentTime : consultingHours) {
+            if (clientName.equals(currentTime.getAccount().getName()) && currentTime.isBillable()) {
+                billableHours.add(currentTime);
+            }
+        }
+        return billableHours;
     }
 
     /**
      * Create a string representation of this object, consisting of the consultant name and the time
      * card week starting day.
      *
-     * @return  a string containing the consultant name and the time card week starting day
+     * @return a string containing the consultant name and the time card week starting day
      */
     @Override
     public String toString() {
-        return consultant.getName().toString();
+        return String.format("%s %s", consultant.getName().toString(), getWeekStartingDay());
     }
 
     /**
      * Create a string representation of this object, suitable for printing the entire time card.
+     *
      * @return this TimeCard as a formatted String.
      */
     public String toReportString() {
-        return "Report String";
+        String title = String.format("Consultant: %s              Week Starting: %s\n\n", getConsultant(), getWeekStartingDay());
+
+        String billable = consultingHours.stream()
+                .filter(hours -> hours.isBillable())
+                .map(hours -> {
+                    return String.format("%-28s %s  %5s  %-20s", hours.getAccount().getName(), hours.getDate(), hours.getHours(), hours.getSkillType());
+                })
+                .collect(Collectors.joining("\n"));
+
+        String nonBillable = consultingHours.stream()
+                .filter(hours -> !hours.isBillable())
+                .map(hours -> {
+                    return String.format("%-28s %s  %5s  %-20s", hours.getAccount().getName(), hours.getDate(), hours.getHours(), hours.getSkillType());
+                })
+                .collect(Collectors.joining("\n"));
+        ;
+        StringBuilder reportString = new StringBuilder()
+                .append("====================================================================\n")
+                .append(title)
+                .append("Billable Time:\n")
+                .append("Account                      Date        Hours  Skill\n")
+                .append("---------------------------  ----------  -----  --------------------\n")
+                .append(billable + "\n")
+                .append("\nNon-billable:\n")
+                .append("Account                      Date        Hours  Skill\n")
+                .append("---------------------------  ----------  -----  --------------------\n")
+                .append(nonBillable + "\n")
+                .append("\nSummary:\n")
+                // 39
+                .append(String.format("%-40s  %4d\n", "Total Billable:", getTotalBillableHours()))
+                .append(String.format("%-40s  %4d\n", "Total Non-Billable:", getTotalNonBillableHours()))
+                .append(String.format("%-40s  %4d\n", "Total Hours:", getTotalHours()))
+                .append("====================================================================\n");
+
+
+        return reportString.toString();
     }
 }

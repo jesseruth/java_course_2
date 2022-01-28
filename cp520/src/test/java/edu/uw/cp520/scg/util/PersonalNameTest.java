@@ -14,13 +14,13 @@ class PersonalNameTest {
         // An empty object will return and empty string
         PersonalName personalName = new PersonalName();
         String actualString = personalName.toString();
-        String expectedString = "";
+        String expectedString = "NLN, NFN NMN";
         assertEquals(expectedString, actualString);
 
         // Update First and Last Name
         personalName.setFirstName(firstName);
         personalName.setLastName(lastName);
-        expectedString = "Ruth, Jesse";
+        expectedString = "Ruth, Jesse NMN";
         actualString = personalName.toString();
         assertEquals(expectedString, actualString);
 

@@ -12,6 +12,16 @@ public final class PersonalName {
     private String middleName;
     private String lastName;
 
+    /** String constant for NLN - No Last Name **/
+    private static final int HASH_FACTOR = 37;
+
+    /** String constant for NLN - No Last Name **/
+    private static final String NLN = "NLN";
+    /** String constant for NFN - No First Name **/
+    private static final String NFN = "NFN";
+    /** String constant for NMN - No Middle Name **/
+    private static final String NMN = "NMN";
+
     /**
      * Create string representation of this object in the format
      *
@@ -19,7 +29,6 @@ public final class PersonalName {
      */
     @Override
     public String toString() {
-        if (lastName.isEmpty() && firstName.isEmpty() && middleName.isEmpty()) return "";
         return  (lastName + ", " + firstName + " " + middleName).trim() ;
     }
 
@@ -27,9 +36,7 @@ public final class PersonalName {
      * Creates a new instance of Name
      */
     public PersonalName() {
-        this.firstName = "";
-        this.middleName = "";
-        this.lastName = "";
+        this(NFN, NMN, NLN);
     }
 
     /**
@@ -51,7 +58,7 @@ public final class PersonalName {
      */
     public PersonalName(String firstName, String lastName) {
         this.firstName = firstName;
-        this.middleName = "";
+        this.middleName = NMN;
         this.lastName = lastName;
     }
 

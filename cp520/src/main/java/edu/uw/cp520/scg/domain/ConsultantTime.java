@@ -10,9 +10,17 @@ import java.util.Objects;
  * @author Jesse Ruth
  */
 public final class ConsultantTime {
+
+    /** Holds the value for the date property.  **/
     private LocalDate date;
+
+    /** Holds the value for the account property.  **/
     private Account account;
-    private Skill skillType;
+
+    /** Holds the value for the skill property.  **/
+    private final Skill skillType;
+
+    /** Holds the value for the hours property.  **/
     private int hours;
 
     /**
@@ -25,7 +33,7 @@ public final class ConsultantTime {
      * @throws IllegalArgumentException if the hours are <= 0.
      */
     public ConsultantTime(LocalDate date, Account account, Skill skillType, int hours) throws IllegalArgumentException {
-        if (hours <= 0) throw new IllegalArgumentException("Hours must be grater than 0");
+        setHours(hours);
         this.date = date;
         this.account = account;
         this.skillType = skillType;
@@ -74,7 +82,7 @@ public final class ConsultantTime {
      * @return Value of skillType property.
      */
     public Skill getSkillType() {
-        return skillType;
+        return this.skillType;
     }
 
     /**
@@ -83,7 +91,7 @@ public final class ConsultantTime {
      * @return Value of hours property.
      */
     public int getHours() {
-        return hours;
+        return this.hours;
     }
 
     /**
@@ -105,6 +113,9 @@ public final class ConsultantTime {
         return getAccount().isBillable();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -113,8 +124,22 @@ public final class ConsultantTime {
         return hours == that.hours && Objects.equals(date, that.date) && Objects.equals(account, that.account) && skillType == that.skillType;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(date, account, skillType, hours);
+    }
+
+    /**
+     * Create a string representation of the element.
+     *
+     * @return Name, dates, hours and Skill type.
+     */
+    @Override
+    public String toString() {
+        return String.format("%-28s %2$tm/%2$td/%2$tY  %3$5d  %4$s%n",
+                             account.getName(), date, hours, skillType);
     }
 }

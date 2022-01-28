@@ -117,5 +117,6 @@ class ConsultantTimeTest {
 
         consultantTime1.setAccount(account2);
         assertNotEquals(consultantTime1.hashCode(), consultantTime2.hashCode());
+        assertEquals("Some Account                 01/01/1978    100  Project manager skill\n", consultantTime2.toString());
     }
 }

@@ -10,20 +10,40 @@ import java.io.Serializable;
  *
  */
 public enum NonBillableAccount implements Account, Serializable, Comparable<NonBillableAccount>  {
+    /** Sick Leave. **/
     SICK_LEAVE("Sick leave"),
+    /** Vacation. **/
     VACATION("Vacation"),
+    /** Biz Dev. **/
     BUSINESS_DEVELOPMENT("Business development");
-    final String name;
 
-    NonBillableAccount(String name) {
+    /** The name of this account **/
+    private final String name;
+
+    /**
+     * Private constructor.
+     *
+     * @param name name of this account
+     */
+    private NonBillableAccount(String name) {
         this.name = name;
     }
 
+    /**
+     * Getter for the name of this account.
+     *
+     * @return the name of this account.
+     */
     @Override
     public String getName() {
         return name;
     }
 
+    /**
+     * Determines if account is billable.
+     *
+     * @return Always return false.
+     */
     @Override
     public boolean isBillable() {
         return false;

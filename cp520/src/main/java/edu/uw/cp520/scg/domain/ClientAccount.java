@@ -8,11 +8,19 @@ import edu.uw.cp520.scg.util.PersonalName;
  * @author Jesse Ruth
  */
 public final class ClientAccount implements Account {
-    String name;
-    PersonalName contact;
+    /**
+     * Holds value of property name.
+     */
+    private final String name;
+
+    /**
+     * Holds value of property contact.
+     */
+    private PersonalName contact;
 
     /**
      * Creates a new instance of ClientAccount.
+     *
      * @param name String with the name of the client.
      * @param contact Name of the contact person for this client.
      */
@@ -23,6 +31,7 @@ public final class ClientAccount implements Account {
 
     /**
      * Gets the account name.
+     *
      * @return value of name property.
      */
     @Override
@@ -32,6 +41,7 @@ public final class ClientAccount implements Account {
 
     /**
      * Setter for contact property.
+     *
      * @param contact new value for contact property.
      */
     public void setContact(PersonalName contact) {
@@ -40,6 +50,7 @@ public final class ClientAccount implements Account {
 
     /**
      * Gets the contact for this account.
+     *
      * @return value of contact property.
      */
     public PersonalName getContact() {
@@ -48,6 +59,7 @@ public final class ClientAccount implements Account {
 
     /**
      * Determines if this account is billable.
+     *
      * @return Always true
      */
     @Override

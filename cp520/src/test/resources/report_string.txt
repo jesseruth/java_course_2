@@ -1,0 +1,23 @@
+====================================================================
+Consultant: Ruth, Jesse Stephen              Week Starting: 1927-05-05
+
+Billable Time:
+Account                      Date        Hours  Skill
+---------------------------  ----------  -----  --------------------
+
+
+Non-billable:
+Account                      Date        Hours  Skill
+---------------------------  ----------  -----  --------------------
+Business development         1927-05-05      3  Project manager skill
+Business development         1927-05-05      2  Tester skill
+Business development         1927-05-05      1  Architect skill
+Business development         1927-05-05      3  Project manager skill
+Business development         1927-05-05      2  Tester skill
+Business development         1927-05-05      1  Architect skill
+
+Summary:
+Total Billable:                              0
+Total Non-Billable:                         12
+Total Hours:                                12
+====================================================================

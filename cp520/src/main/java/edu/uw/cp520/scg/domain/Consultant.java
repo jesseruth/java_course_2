@@ -8,7 +8,9 @@ import edu.uw.cp520.scg.util.PersonalName;
  * @author Jesse Ruth
  */
 public class Consultant {
-    PersonalName name;
+
+    /** Hold value of personal Name **/
+    private final PersonalName name;
 
     /**
      * Creates a new instance of Consultant.

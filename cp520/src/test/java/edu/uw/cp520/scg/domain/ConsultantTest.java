@@ -18,6 +18,6 @@ class ConsultantTest {
     void testToString() {
         PersonalName name = new PersonalName("Jesse", "Ruth");
         Consultant consultant = new Consultant(name);
-        assertEquals("Ruth, Jesse", consultant.toString());
+        assertEquals("Ruth, Jesse NMN", consultant.toString());
     }
 }
