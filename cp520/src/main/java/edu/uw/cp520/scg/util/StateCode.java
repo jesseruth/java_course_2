@@ -85,7 +85,7 @@ public enum StateCode {
     private final String friendlyName;
 
     /**
-     * 
+     *
      * @param friendlyName
      */
     private StateCode(String friendlyName) {
