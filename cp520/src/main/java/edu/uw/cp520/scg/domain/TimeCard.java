@@ -13,9 +13,25 @@ import java.util.stream.Collectors;
  * @author Jesse Ruth
  */
 public final class TimeCard {
+    /**
+     * Format string for a line header on the time card.
+     */
+    private static final String LINE_HEADER_FORMAT = String.format("%-28s %-10s  %5s  %s%n"
+                    + "---------------------------  ----------  -----  --------------------%n",
+            "Account", "Date", "Hours", "Skill");
+    /**
+     * The consultant.
+     **/
     private final Consultant consultant;
+    /**
+     * Start date for this timecard.
+     **/
     private final LocalDate weekStartingDay;
+    /**
+     * List of consulting hours.
+     **/
     private final List<ConsultantTime> consultingHours;
+
 
     /**
      * Creates a new instance of TimeCard
@@ -136,7 +152,7 @@ public final class TimeCard {
      * @return this TimeCard as a formatted String.
      */
     public String toReportString() {
-        String title = String.format("Consultant: %s              Week Starting: %s\n\n", getConsultant(), getWeekStartingDay());
+        String title = String.format("Consultant: %s              Week Starting: %s%n%n", getConsultant(), getWeekStartingDay());
 
         String billable = consultingHours.stream()
                 .filter(hours -> hours.isBillable())
@@ -156,13 +172,10 @@ public final class TimeCard {
                 .append("====================================================================\n")
                 .append(title)
                 .append("Billable Time:\n")
-                .append("Account                      Date        Hours  Skill\n")
-                .append("---------------------------  ----------  -----  --------------------\n")
+                .append(LINE_HEADER_FORMAT)
                 .append(billable + "\n")
                 .append("\nNon-billable:\n")
-                .append("Account                      Date        Hours  Skill\n")
-                .append("---------------------------  ----------  -----  --------------------\n")
-                .append(nonBillable + "\n")
+                .append(LINE_HEADER_FORMAT).append(nonBillable).append("\n")
                 .append("\nSummary:\n")
                 // 39
                 .append(String.format("%-40s  %4d\n", "Total Billable:", getTotalBillableHours()))

@@ -1,6 +1,8 @@
 package edu.uw.cp520.scg.domain;
 
+import edu.uw.cp520.scg.util.Address;
 import edu.uw.cp520.scg.util.PersonalName;
+import edu.uw.cp520.scg.util.StateCode;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -8,32 +10,33 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ConsultantTimeTest {
-    String errorMessage = "Hours must be grater than 0";
+    final String errorMessage = "Hours must be grater than 0";
+    final Address address = new Address("125 main", "Seattle", StateCode.WA, "12349");
 
     @Test
     void hoursMustBePositive() {
-        LocalDate localDate = LocalDate.of(1978,1,1);
+        LocalDate localDate = LocalDate.of(1978, 1, 1);
         PersonalName accountContact = new PersonalName("Jesse", "ruth");
-        Account account = new ClientAccount("Some Account", accountContact);
+        Account account = new ClientAccount("Some Account", accountContact, address);
         try {
             new ConsultantTime(localDate, account, Skill.PROJECT_MANAGER, 0);
             fail();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            assertEquals(errorMessage,e.getMessage());
+            assertEquals(errorMessage, e.getMessage());
         }
     }
 
     @Test
     void manageDate() {
-        LocalDate localDate = LocalDate.of(1978,1,1);
+        LocalDate localDate = LocalDate.of(1978, 1, 1);
         PersonalName accountContact = new PersonalName("Jesse", "ruth");
-        Account account = new ClientAccount("Some Account", accountContact);
+        Account account = new ClientAccount("Some Account", accountContact, address);
         ConsultantTime consultantTime = new ConsultantTime(localDate, account, Skill.PROJECT_MANAGER, 100);
 
         assertEquals(1978, consultantTime.getDate().getYear());
 
-        LocalDate localDate2 = LocalDate.of(1979,10,11);
+        LocalDate localDate2 = LocalDate.of(1979, 10, 11);
         consultantTime.setDate(localDate2);
         assertEquals(1979, consultantTime.getDate().getYear());
 
@@ -42,9 +45,9 @@ class ConsultantTimeTest {
 
     @Test
     void setHours() {
-        LocalDate localDate = LocalDate.of(1978,1,1);
+        LocalDate localDate = LocalDate.of(1978, 1, 1);
         PersonalName accountContact = new PersonalName("Jesse", "ruth");
-        Account account = new ClientAccount("Some Account", accountContact);
+        Account account = new ClientAccount("Some Account", accountContact, address);
         ConsultantTime consultantTime = new ConsultantTime(localDate, account, Skill.PROJECT_MANAGER, 100);
 
         int hours = 10;
@@ -57,25 +60,25 @@ class ConsultantTimeTest {
             fail();
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
-            assertEquals(errorMessage,e.getMessage());
+            assertEquals(errorMessage, e.getMessage());
         }
     }
 
     @Test
     void isBillable() {
-        LocalDate localDate = LocalDate.of(1978,1,1);
+        LocalDate localDate = LocalDate.of(1978, 1, 1);
         PersonalName accountContact = new PersonalName("Jesse", "ruth");
-        Account account = new ClientAccount("Some Account", accountContact);
+        Account account = new ClientAccount("Some Account", accountContact, address);
         ConsultantTime consultantTime = new ConsultantTime(localDate, account, Skill.PROJECT_MANAGER, 100);
         assertTrue(consultantTime.isBillable());
     }
 
     @Test
     void testEquals() {
-        LocalDate localDate = LocalDate.of(1978,1,1);
+        LocalDate localDate = LocalDate.of(1978, 1, 1);
         PersonalName accountContact = new PersonalName("Jesse", "ruth");
-        Account account = new ClientAccount("Some Account", accountContact);
-        Account account2 = new ClientAccount("Some Other Account", accountContact);
+        Account account = new ClientAccount("Some Account", accountContact, address);
+        Account account2 = new ClientAccount("Some Other Account", accountContact, address);
         ConsultantTime consultantTime1 = new ConsultantTime(localDate, account, Skill.PROJECT_MANAGER, 100);
         ConsultantTime consultantTime2 = new ConsultantTime(localDate, account, Skill.PROJECT_MANAGER, 100);
         ConsultantTime consultantTime3 = new ConsultantTime(localDate, account, Skill.SOFTWARE_TESTER, 100);
@@ -106,10 +109,10 @@ class ConsultantTimeTest {
 
     @Test
     void testHashcode() {
-        LocalDate localDate = LocalDate.of(1978,1,1);
+        LocalDate localDate = LocalDate.of(1978, 1, 1);
         PersonalName accountContact = new PersonalName("Jesse", "ruth");
-        Account account = new ClientAccount("Some Account", accountContact);
-        Account account2 = new ClientAccount("Some Other Account", accountContact);
+        Account account = new ClientAccount("Some Account", accountContact, address);
+        Account account2 = new ClientAccount("Some Other Account", accountContact, address);
         ConsultantTime consultantTime1 = new ConsultantTime(localDate, account, Skill.PROJECT_MANAGER, 100);
         ConsultantTime consultantTime2 = new ConsultantTime(localDate, account, Skill.PROJECT_MANAGER, 100);
         assertEquals(consultantTime1.hashCode(), consultantTime2.hashCode());
