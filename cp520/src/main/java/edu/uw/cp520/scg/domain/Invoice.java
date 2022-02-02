@@ -13,6 +13,7 @@ import java.time.Month;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.stream.IntStream;
 
 /**
  * Invoice encapsulates the attributes and behavior to create client invoices for a given time
@@ -26,11 +27,22 @@ import java.util.Properties;
  * @author Jesse Ruth
  */
 public final class Invoice {
-
+    private static final String PROP_FILE_NAME = "invoice.properties";
+    private static final String BIZ_NAME_PROP = "business.name";
+    private static final String BIZ_STREET_PROP = "business.street";
+    private static final String BIZ_CITY_PROP = "business.city";
+    private static final String BIZ_STATE_PROP = "business.state";
+    private static final String BIZ_ZIP_PROP = "business.zip";
+    private static final String BIZ_NAME;
+    private static final String BIZ_STREET;
+    private static final String BIZ_CITY;
+    private static final String BIZ_STATE;
+    private static final String BIZ_ZIP;
+    private static final Address BIZ_ADDRESS;
     private static final String NA = "NA";
     private static final DecimalFormat DECIMAL_DISPLAY = new DecimalFormat("#,###.00");
     private static final String TOTAL = "%nTotal: %60s  %10s%n";
-    private static final String BODY_HEADER = "%-10s  %-28s %-19s  %-6s %-10s%n";
+    private static final String BODY_HEADER = "%-10s  %-28s %-19s  %-6s %s%n";
     private static final String LINE_ITEM = "%-10s  %-28s %-19s  %5s  %10s%n";
     private static final String BODY_HEADER_LABEL = String.format(BODY_HEADER, "Date", "Consultant", "Skill", "Hours", "Charge");
     private static final String BODY_HEADER_COLS = String.format(BODY_HEADER, "----------", "---------------------------", "------------------", "-----", "----------");
@@ -38,6 +50,23 @@ public final class Invoice {
      * This class' logger.
      */
     private static final Logger log = LoggerFactory.getLogger(Invoice.class);
+
+    static {
+        Properties prop = new Properties();
+        try (InputStream in = Invoice.class.getClassLoader().getResourceAsStream(PROP_FILE_NAME)) {
+            prop.load(in);
+        } catch (final IOException e) {
+            e.printStackTrace();
+        }
+        log.debug("Business Name Property {}", prop.get(BIZ_NAME_PROP));
+        BIZ_NAME = prop.getProperty(BIZ_NAME_PROP, NA);
+        BIZ_STREET = prop.getProperty(BIZ_STREET_PROP, NA);
+        BIZ_CITY = prop.getProperty(BIZ_CITY_PROP, NA);
+        BIZ_STATE = prop.getProperty(BIZ_STATE_PROP, NA);
+        BIZ_ZIP = prop.getProperty(BIZ_ZIP_PROP, NA);
+        BIZ_ADDRESS = new Address(BIZ_STREET, BIZ_CITY, StateCode.valueOf(BIZ_STATE), BIZ_ZIP);
+    }
+
     /**
      * Client for this Invoice.
      **/
@@ -58,11 +87,6 @@ public final class Invoice {
      * Start date for this invoice.
      */
     private final LocalDate startDate;
-    /**
-     * Store properties for this invoice
-     **/
-    private final Properties prop = new Properties();
-
 
     /**
      * Construct an Invoice for a client. The time period is set from the beginning to the end
@@ -180,25 +204,8 @@ public final class Invoice {
         int pages = lineItems.size() <= 5 ? 1 : (lineItems.size() / 5) + 1;
         log.debug("Total Pages {}", pages);
 
-        try (InputStream in = Invoice.class.getClassLoader().getResourceAsStream("invoice.properties")) {
-            prop.load(in);
-        } catch (final IOException e) {
-            e.printStackTrace();
-        }
-        log.debug("Business Name Property {}", prop.get("business.name"));
-
-        String businessName = prop.getProperty("business.name", NA);
-        String businessStreet = prop.getProperty("business.street", NA);
-        String businessCity = prop.getProperty("business.city", NA);
-        String businessState = prop.getProperty("business.state", NA);
-        String businessZip = prop.getProperty("business.zip", NA);
-
-        Address businessAddress = new Address(businessStreet, businessCity, StateCode.valueOf(businessState), businessZip);
-
-        LocalDate invoiceDate = LocalDate.now();
-        LocalDate invoiceMonthDate = LocalDate.of(invoiceYear, invoiceMonth, 1);
-        InvoiceHeader invoiceHeader = new InvoiceHeader(businessName, businessAddress, client, invoiceDate, invoiceMonthDate);
-        InvoiceFooter invoiceFooter = new InvoiceFooter(businessName);
+        InvoiceHeader invoiceHeader = new InvoiceHeader(BIZ_NAME, BIZ_ADDRESS, client, LocalDate.now(), startDate);
+        InvoiceFooter invoiceFooter = new InvoiceFooter(BIZ_NAME);
         lineItems.sort((InvoiceLineItem a, InvoiceLineItem b) -> {
             if (a.getConsultant().getName().equals(b.getConsultant().getName())) {
                 return a.getDate().compareTo(b.getDate());
@@ -210,7 +217,7 @@ public final class Invoice {
         Iterator<InvoiceLineItem> lines = lineItems.iterator();
         StringBuilder report = new StringBuilder();
 
-        for (int page = 1; page <= pages; page++) {
+        IntStream.rangeClosed(1, pages).forEach(page -> {
             report.append(invoiceHeader);
             report.append(BODY_HEADER_LABEL);
             report.append(BODY_HEADER_COLS);
@@ -230,7 +237,8 @@ public final class Invoice {
 
             report.append(invoiceFooter);
             invoiceFooter.incrementPageNumber();
-        }
+        });
+
         return report.toString();
     }
 }

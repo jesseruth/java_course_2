@@ -1,0 +1,96 @@
+The Small Consulting Group
+1616 Index Ct.
+Renton,WA 98058
+
+Invoice for:
+Account 1
+125 main
+Seattle,WA 12349
+
+Invoice For Month of: December 2020
+Invoice Date: February 02, 2022
+
+Date        Consultant                   Skill                Hours  Charge
+----------  ---------------------------  ------------------   -----  ----------
+2020-12-01  Bob, Jim NMN                 Project manager skill     10    2,500.00
+2020-12-02  Bob, Jim NMN                 Project manager skill     10    2,500.00
+2020-12-03  Bob, Jim NMN                 Project manager skill     10    2,500.00
+2020-12-04  Bob, Jim NMN                 Project manager skill     10    2,500.00
+2020-12-05  Bob, Jim NMN                 Project manager skill     10    2,500.00
+
+
+The Small Consulting Group                                                    1
+===============================================================================
+
+The Small Consulting Group
+1616 Index Ct.
+Renton,WA 98058
+
+Invoice for:
+Account 1
+125 main
+Seattle,WA 12349
+
+Invoice For Month of: December 2020
+Invoice Date: February 02, 2022
+
+Date        Consultant                   Skill                Hours  Charge
+----------  ---------------------------  ------------------   -----  ----------
+2020-12-06  Bob, Jim NMN                 Project manager skill     10    2,500.00
+2020-12-07  Bob, Jim NMN                 Project manager skill     10    2,500.00
+2020-12-08  Bob, Jim NMN                 Project manager skill     10    2,500.00
+2020-12-09  Bob, Jim NMN                 Project manager skill     10    2,500.00
+2020-12-10  Bob, Jim NMN                 Project manager skill     10    2,500.00
+
+
+The Small Consulting Group                                                    2
+===============================================================================
+
+The Small Consulting Group
+1616 Index Ct.
+Renton,WA 98058
+
+Invoice for:
+Account 1
+125 main
+Seattle,WA 12349
+
+Invoice For Month of: December 2020
+Invoice Date: February 02, 2022
+
+Date        Consultant                   Skill                Hours  Charge
+----------  ---------------------------  ------------------   -----  ----------
+2020-12-11  Bob, Jim NMN                 Project manager skill     10    2,500.00
+1900-12-22  Joe, Mary NMN                Project manager skill     10    2,500.00
+2020-05-22  Joe, Mary NMN                Project manager skill     10    2,500.00
+2020-12-01  Joe, Mary NMN                Project manager skill     10    2,500.00
+2020-12-02  Joe, Mary NMN                Project manager skill     10    2,500.00
+
+
+The Small Consulting Group                                                    3
+===============================================================================
+
+The Small Consulting Group
+1616 Index Ct.
+Renton,WA 98058
+
+Invoice for:
+Account 1
+125 main
+Seattle,WA 12349
+
+Invoice For Month of: December 2020
+Invoice Date: February 02, 2022
+
+Date        Consultant                   Skill                Hours  Charge
+----------  ---------------------------  ------------------   -----  ----------
+2020-12-03  Joe, Mary NMN                Project manager skill     10    2,500.00
+2020-12-04  Joe, Mary NMN                Project manager skill     10    2,500.00
+2020-12-05  Joe, Mary NMN                Project manager skill     10    2,500.00
+
+Total:                                                          160   40,000.00
+
+
+The Small Consulting Group                                                    4
+===============================================================================
+
