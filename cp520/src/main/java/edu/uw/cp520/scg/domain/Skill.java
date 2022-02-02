@@ -6,28 +6,42 @@ package edu.uw.cp520.scg.domain;
  * @author Jesse Ruth
  */
 public enum Skill {
-    /** Project Manager Skill **/
+    /**
+     * Project Manager Skill
+     **/
     PROJECT_MANAGER("Project manager skill", 250),
-    /** Architect Skill **/
+    /**
+     * Architect Skill
+     **/
     SOFTWARE_ENGINEER("Engineer skill", 150),
-    /** Software Tester Skill **/
+    /**
+     * Software Tester Skill
+     **/
     SOFTWARE_TESTER("Tester skill", 100),
-    /** System Architect Skill **/
+    /**
+     * System Architect Skill
+     **/
     SYSTEM_ARCHITECT("Architect skill", 200),
-    /** Unknown Skill **/
+    /**
+     * Unknown Skill
+     **/
     UNKNOWN_SKILL("Unknown skill", 0);
 
-    /** Holds the value for the label property **/
+    /**
+     * Holds the value for the label property
+     **/
     private final String label;
 
-    /** Holds the value for the rate property **/
+    /**
+     * Holds the value for the rate property
+     **/
     private final int rate;
 
     /**
      * Skill constructor.
      *
      * @param label Friendly value
-     * @param rate Hourly rate
+     * @param rate  Hourly rate
      */
     private Skill(String label, int rate) {
         this.label = label;

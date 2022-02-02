@@ -11,16 +11,21 @@ import java.util.Objects;
  */
 public final class ConsultantTime {
 
-    /** Holds the value for the date property.  **/
-    private LocalDate date;
-
-    /** Holds the value for the account property.  **/
-    private Account account;
-
-    /** Holds the value for the skill property.  **/
+    /**
+     * Holds the value for the skill property.
+     **/
     private final Skill skillType;
-
-    /** Holds the value for the hours property.  **/
+    /**
+     * Holds the value for the date property.
+     **/
+    private LocalDate date;
+    /**
+     * Holds the value for the account property.
+     **/
+    private Account account;
+    /**
+     * Holds the value for the hours property.
+     **/
     private int hours;
 
     /**
@@ -30,7 +35,7 @@ public final class ConsultantTime {
      * @param account   The account to charge the hours to; either a Client or NonBillableAccount.
      * @param skillType The skill type.
      * @param hours     The number of hours, which must be positive.
-     * @throws IllegalArgumentException if the hours are <= 0.
+     * @throws IllegalArgumentException if the hours are less than or equal to 0.
      */
     public ConsultantTime(LocalDate date, Account account, Skill skillType, int hours) throws IllegalArgumentException {
         setHours(hours);
@@ -140,6 +145,6 @@ public final class ConsultantTime {
     @Override
     public String toString() {
         return String.format("%-28s %2$tm/%2$td/%2$tY  %3$5d  %4$s%n",
-                             account.getName(), date, hours, skillType);
+                account.getName(), date, hours, skillType);
     }
 }

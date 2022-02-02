@@ -9,11 +9,14 @@ import edu.uw.cp520.scg.util.PersonalName;
  */
 public class Consultant {
 
-    /** Hold value of personal Name **/
+    /**
+     * Hold value of personal Name
+     **/
     private final PersonalName name;
 
     /**
      * Creates a new instance of Consultant.
+     *
      * @param name the consultant's name.
      */
     public Consultant(PersonalName name) {
@@ -22,6 +25,7 @@ public class Consultant {
 
     /**
      * Getter for name property.
+     *
      * @return value of name property.
      */
     public final PersonalName getName() {
@@ -30,6 +34,7 @@ public class Consultant {
 
     /**
      * Returns the string representation of the consultant's name.
+     *
      * @return the consultant name string
      */
     @Override

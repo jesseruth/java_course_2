@@ -40,10 +40,10 @@ public final class InvoiceHeader {
     /**
      * Create an invoice header.
      *
-     * @param businessName The business name.
+     * @param businessName    The business name.
      * @param businessAddress The business address.
-     * @param clientAccount The client account.
-     * @param invoiceDate The invoice date.
+     * @param clientAccount   The client account.
+     * @param invoiceDate     The invoice date.
      * @param invoiceForMonth The invoice month.
      */
     public InvoiceHeader(String businessName, Address businessAddress, ClientAccount clientAccount, LocalDate invoiceDate, LocalDate invoiceForMonth) {

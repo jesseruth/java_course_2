@@ -12,22 +12,30 @@ import java.time.LocalDate;
  * @author Jesse Ruth
  */
 public final class InvoiceLineItem {
-    /** The date of this line item. **/
+    /**
+     * The date of this line item.
+     **/
     private final LocalDate date;
-    /** Consultant for this line item. **/
+    /**
+     * Consultant for this line item.
+     **/
     private final Consultant consultant;
-    /** Skill for this line item. **/
+    /**
+     * Skill for this line item.
+     **/
     private final Skill skill;
-    /** Hours for this line item. **/
+    /**
+     * Hours for this line item.
+     **/
     private final int hours;
 
     /**
      * Construct an InvoiceLineItem.
      *
-     * @param date The date of this line item.
+     * @param date       The date of this line item.
      * @param consultant Consultant for this line item.
-     * @param skill Skill for this line item.
-     * @param hours Hours for this line item.
+     * @param skill      Skill for this line item.
+     * @param hours      Hours for this line item.
      */
     InvoiceLineItem(LocalDate date, Consultant consultant, Skill skill, int hours) {
         this.date = date;
@@ -38,6 +46,7 @@ public final class InvoiceLineItem {
 
     /**
      * Get the date for this line item.
+     *
      * @return The Date.
      */
     public LocalDate getDate() {
@@ -46,6 +55,7 @@ public final class InvoiceLineItem {
 
     /**
      * Get the consultant for this line item.
+     *
      * @return The consultant.
      */
     public Consultant getConsultant() {
@@ -54,6 +64,7 @@ public final class InvoiceLineItem {
 
     /**
      * Get the skill for this line item.
+     *
      * @return The Skill
      */
     public Skill getSkill() {
@@ -62,6 +73,7 @@ public final class InvoiceLineItem {
 
     /**
      * Get the hours for this line item.
+     *
      * @return The hours.
      */
     public int getHours() {
@@ -70,6 +82,7 @@ public final class InvoiceLineItem {
 
     /**
      * Get the charge for this line item.
+     *
      * @return The charge.
      */
     public int getCharge() {
@@ -78,6 +91,7 @@ public final class InvoiceLineItem {
 
     /**
      * Print the date, consultant, skill, hours and charge for this line item.
+     *
      * @return Formatted string.
      */
     @Override

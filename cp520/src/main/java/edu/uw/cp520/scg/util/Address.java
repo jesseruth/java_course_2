@@ -82,6 +82,9 @@ public class Address {
         return String.format("%s\n%s,%s %s", getStreetNumber(), getCity(), getState(), getPostalCode());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -96,6 +99,9 @@ public class Address {
         return postalCode != null ? postalCode.equals(address.postalCode) : address.postalCode == null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         int result = streetNumber != null ? streetNumber.hashCode() : 0;

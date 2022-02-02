@@ -7,17 +7,24 @@ import java.io.Serializable;
  * or business development.
  *
  * @author Jesse Ruth
- *
  */
-public enum NonBillableAccount implements Account, Serializable, Comparable<NonBillableAccount>  {
-    /** Sick Leave. **/
+public enum NonBillableAccount implements Account, Serializable, Comparable<NonBillableAccount> {
+    /**
+     * Sick Leave.
+     **/
     SICK_LEAVE("Sick leave"),
-    /** Vacation. **/
+    /**
+     * Vacation.
+     **/
     VACATION("Vacation"),
-    /** Biz Dev. **/
+    /**
+     * Biz Dev.
+     **/
     BUSINESS_DEVELOPMENT("Business development");
 
-    /** The name of this account **/
+    /**
+     * The name of this account
+     **/
     private final String name;
 
     /**

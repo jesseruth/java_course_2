@@ -27,7 +27,7 @@ public final class ClientAccount implements Account {
     /**
      * Creates a new instance of ClientAccount.
      *
-     * @param name String with the name of the client.
+     * @param name    String with the name of the client.
      * @param contact Name of the contact person for this client.
      * @param address Addres of this client.
      */
@@ -48,15 +48,6 @@ public final class ClientAccount implements Account {
     }
 
     /**
-     * Setter for contact property.
-     *
-     * @param contact new value for contact property.
-     */
-    public void setContact(PersonalName contact) {
-        this.contact = contact;
-    }
-
-    /**
      * Gets the contact for this account.
      *
      * @return value of contact property.
@@ -66,7 +57,17 @@ public final class ClientAccount implements Account {
     }
 
     /**
+     * Setter for contact property.
+     *
+     * @param contact new value for contact property.
+     */
+    public void setContact(PersonalName contact) {
+        this.contact = contact;
+    }
+
+    /**
      * Gets the address for this account.
+     *
      * @return value of address property.
      */
     public Address getAddress() {
@@ -75,6 +76,7 @@ public final class ClientAccount implements Account {
 
     /**
      * Setter for address property.
+     *
      * @param address new value for address property
      */
     public void setAddress(Address address) {

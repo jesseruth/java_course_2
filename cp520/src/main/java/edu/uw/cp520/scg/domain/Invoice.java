@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.Month;
@@ -26,6 +27,7 @@ import java.util.Properties;
  */
 public final class Invoice {
 
+    private static final String NA = "NA";
     private static final DecimalFormat DECIMAL_DISPLAY = new DecimalFormat("#,###.00");
     private static final String TOTAL = "%nTotal: %60s  %10s%n";
     private static final String BODY_HEADER = "%-10s  %-28s %-19s  %-6s %-10s%n";
@@ -52,9 +54,10 @@ public final class Invoice {
      * Line items for this invoice.
      */
     private final ArrayList<InvoiceLineItem> lineItems = new ArrayList<>();
-
+    /**
+     * Start date for this invoice.
+     */
     private final LocalDate startDate;
-    private final LocalDate endDate;
     /**
      * Store properties for this invoice
      **/
@@ -69,16 +72,14 @@ public final class Invoice {
      * @param invoiceMonth Month for which this Invoice is being created.
      * @param invoiceYear  Year for which this Invoice is being created.
      */
-    public Invoice(ClientAccount client, Month invoiceMonth, int invoiceYear) {
+    public Invoice(final ClientAccount client, final Month invoiceMonth, final int invoiceYear) {
         this.client = client;
         this.invoiceMonth = invoiceMonth;
         this.invoiceYear = invoiceYear;
         this.startDate = LocalDate.of(invoiceYear, invoiceMonth, 1);
-        this.endDate = startDate.withDayOfMonth(startDate.lengthOfMonth());
 
         log.debug("Construct an invoice for {}", client.getName());
         log.debug("Beginning {}", startDate);
-        log.debug("Ending    {}", endDate);
     }
 
     /**
@@ -116,7 +117,7 @@ public final class Invoice {
      */
     public int getTotalHours() {
         log.debug("Calling get total hours");
-        return lineItems.stream().filter(invoiceLineItem -> invoiceLineItem.getDate().getYear() == invoiceYear && invoiceLineItem.getDate().getMonth() == invoiceMonth).map(InvoiceLineItem::getHours).mapToInt(Integer::intValue).sum();
+        return lineItems.stream().filter(invoiceLineItem -> invoiceLineItem.getDate().getYear() == invoiceYear && invoiceLineItem.getDate().getMonth() == getInvoiceMonth()).map(InvoiceLineItem::getHours).mapToInt(Integer::intValue).sum();
     }
 
     /**
@@ -126,7 +127,7 @@ public final class Invoice {
      */
     public int getTotalCharges() {
         log.debug("Calling get total charges");
-        return lineItems.stream().filter(invoiceLineItem -> invoiceLineItem.getDate().getYear() == invoiceYear && invoiceLineItem.getDate().getMonth() == invoiceMonth).map(InvoiceLineItem::getCharge).mapToInt(Integer::intValue).sum();
+        return lineItems.stream().filter(invoiceLineItem -> invoiceLineItem.getDate().getYear() == invoiceYear && invoiceLineItem.getDate().getMonth() == getInvoiceMonth()).map(InvoiceLineItem::getCharge).mapToInt(Integer::intValue).sum();
     }
 
     /**
@@ -134,7 +135,7 @@ public final class Invoice {
      *
      * @param lineItem InvoiceLineItem to add.
      */
-    public void addLineItem(InvoiceLineItem lineItem) {
+    public void addLineItem(final InvoiceLineItem lineItem) {
         log.debug("Adding hours {}", lineItem.getHours());
         lineItems.add(lineItem);
     }
@@ -146,7 +147,7 @@ public final class Invoice {
      *
      * @param timeCard the TimeCard potentially containing line items for this Invoices client.
      */
-    public void extractLineItems(TimeCard timeCard) {
+    public void extractLineItems(final TimeCard timeCard) {
         log.debug("Extract line items {}", timeCard.toString());
         timeCard.getConsultingHours().stream().peek(consultantTime -> {
             log.debug("Peak consultantTime {}", consultantTime);
@@ -178,18 +179,19 @@ public final class Invoice {
         log.debug("Calling toReportString");
         int pages = lineItems.size() <= 5 ? 1 : (lineItems.size() / 5) + 1;
         log.debug("Total Pages {}", pages);
-        try {
-            prop.load(Invoice.class.getClassLoader().getResourceAsStream("invoice.properties"));
-        } catch (IOException e) {
+
+        try (InputStream in = Invoice.class.getClassLoader().getResourceAsStream("invoice.properties")) {
+            prop.load(in);
+        } catch (final IOException e) {
             e.printStackTrace();
         }
         log.debug("Business Name Property {}", prop.get("business.name"));
 
-        String businessName = prop.getProperty("business.name");
-        String businessStreet = prop.getProperty("business.street");
-        String businessCity = prop.getProperty("business.city");
-        String businessState = prop.getProperty("business.state");
-        String businessZip = prop.getProperty("business.zip");
+        String businessName = prop.getProperty("business.name", NA);
+        String businessStreet = prop.getProperty("business.street", NA);
+        String businessCity = prop.getProperty("business.city", NA);
+        String businessState = prop.getProperty("business.state", NA);
+        String businessZip = prop.getProperty("business.zip", NA);
 
         Address businessAddress = new Address(businessStreet, businessCity, StateCode.valueOf(businessState), businessZip);
 

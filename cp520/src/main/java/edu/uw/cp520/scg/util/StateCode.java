@@ -1,6 +1,7 @@
 package edu.uw.cp520.scg.util;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  * U. S. Postal state codes.
@@ -75,7 +76,7 @@ public enum StateCode {
 
     static {
         for (StateCode state : values()) {
-            BY_LABEL.put(state.getName(), state);
+            BY_LABEL.put(state.getName().toUpperCase(Locale.US), state);
         }
     }
 

@@ -6,21 +6,18 @@ package edu.uw.cp520.scg.domain;
  * @author Jesse Ruth
  */
 public class InvoiceFooter {
-    /** Bars to display in footer **/
+    /**
+     * Bars to display in footer
+     **/
     private static final String BARS = "===============================================================================";
-    /** Name of business **/
+    /**
+     * Name of business
+     **/
     private final String businessName;
     /**
      *
      */
     protected int pageNumber = 1;
-
-    /**
-     * Increase the page number by 1.
-     */
-    public void incrementPageNumber() {
-        pageNumber++;
-    }
 
     /**
      * Creates a business footer that can increment pages.
@@ -32,12 +29,19 @@ public class InvoiceFooter {
     }
 
     /**
+     * Increase the page number by 1.
+     */
+    public void incrementPageNumber() {
+        pageNumber++;
+    }
+
+    /**
      * Prints the footer with business name and page number.
      *
      * @return A footer.
      */
     @Override
     public String toString() {
-        return String.format("%n%n%-70s%9s%n%s%n%n",businessName, pageNumber, BARS);
+        return String.format("%n%n%-70s%9s%n%s%n%n", businessName, pageNumber, BARS);
     }
 }
