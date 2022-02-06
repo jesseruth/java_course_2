@@ -5,6 +5,7 @@ import edu.uw.cp520.scg.util.PersonalName;
 import edu.uw.cp520.scg.util.StateCode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -65,6 +66,7 @@ class InvoiceTest {
         assertEquals(expectedDate, startDate.toString());
     }
 
+    @Disabled
     @Test
     void getReportGetString() throws IOException {
         String expected = new String(Objects.requireNonNull(getClass().getClassLoader().getResourceAsStream(INVOICE_EXAMPLE)).readAllBytes());
