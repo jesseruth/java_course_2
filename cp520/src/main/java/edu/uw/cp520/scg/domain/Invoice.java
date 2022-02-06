@@ -229,14 +229,14 @@ public final class Invoice {
                 InvoiceLineItem invoiceLineItem = lines.next();
                 String lineCharge = DECIMAL_DISPLAY.format((double) invoiceLineItem.getCharge());
                 report.append(String.format(LINE_ITEM, invoiceLineItem.getDate(), invoiceLineItem.getConsultant(), invoiceLineItem.getSkill(), invoiceLineItem.getHours(), lineCharge));
-                if (page == pages) {
-                    String totalCharges = DECIMAL_DISPLAY.format((double) getTotalCharges());
-                    report.append(String.format(TOTAL, getTotalHours(), totalCharges));
-                }
+
                 counter++;
             }
 
-
+            if (page == pages) {
+                String totalCharges = DECIMAL_DISPLAY.format((double) getTotalCharges());
+                report.append(String.format(TOTAL, getTotalHours(), totalCharges));
+            }
 
             report.append(invoiceFooter);
             invoiceFooter.incrementPageNumber();
