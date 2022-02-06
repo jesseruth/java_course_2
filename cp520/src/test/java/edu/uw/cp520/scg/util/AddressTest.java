@@ -14,7 +14,8 @@ class AddressTest {
         String postalCode = "123345";
         Address address = new Address(streetNumber, city, state, postalCode);
         String actual = address.toString();
-        String expected = "1234 Main St.\nSeattle,WA 123345";
+        String expected = "1234 Main St.\n" +
+                "Seattle, WA 123345";
         assertEquals(expected, actual);
     }
 

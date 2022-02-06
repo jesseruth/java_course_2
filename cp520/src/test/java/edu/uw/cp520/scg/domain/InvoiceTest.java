@@ -76,7 +76,7 @@ class InvoiceTest {
     @Test
     void getGetString() {
         String expected = "Invoice{client=ClientAccount{name='Account 1', contact=Bob, Jim NMN, address=125 main\n" +
-                "Seattle,WA 12349}, invoiceMonth=DECEMBER, invoiceYear=2020}";
+                "Seattle, WA 12349}, invoiceMonth=DECEMBER, invoiceYear=2020}";
         assertEquals(expected, invoice.toString());
     }
 

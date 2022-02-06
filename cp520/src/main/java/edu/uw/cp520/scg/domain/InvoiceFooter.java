@@ -1,5 +1,7 @@
 package edu.uw.cp520.scg.domain;
 
+import java.util.Locale;
+
 /**
  * Creates an invoice footer with a business name.
  *
@@ -42,6 +44,6 @@ public class InvoiceFooter {
      */
     @Override
     public String toString() {
-        return String.format("%n%n%-70s%9s%n%s%n%n", businessName, pageNumber, BARS);
+        return String.format(Locale.US, "%n%n%n%-69s Page: %3d%n%s%n", businessName, pageNumber, BARS);
     }
 }

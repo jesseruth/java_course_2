@@ -79,7 +79,7 @@ public class Address {
      */
     @Override
     public String toString() {
-        return String.format("%s\n%s,%s %s", getStreetNumber(), getCity(), getState(), getPostalCode());
+        return String.format("%s\n%s, %s %s", getStreetNumber(), getCity(), getState(), getPostalCode());
     }
 
     /**

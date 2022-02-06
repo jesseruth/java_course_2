@@ -201,11 +201,12 @@ public final class Invoice {
      */
     public String toReportString() {
         log.debug("Calling toReportString");
-        int pages = lineItems.size() <= 5 ? 1 : (lineItems.size() / 5) + 1;
+        int totalRows = lineItems.size() + 1; // for total
+        int pages = totalRows <= 5 ? 1 : (lineItems.size() / 5) + 1;
         log.debug("Total Pages {}", pages);
 
-        InvoiceHeader invoiceHeader = new InvoiceHeader(BIZ_NAME, BIZ_ADDRESS, client, LocalDate.now(), startDate);
-        InvoiceFooter invoiceFooter = new InvoiceFooter(BIZ_NAME);
+        final InvoiceHeader invoiceHeader = new InvoiceHeader(BIZ_NAME, BIZ_ADDRESS, client, LocalDate.now(), startDate);
+        final InvoiceFooter invoiceFooter = new InvoiceFooter(BIZ_NAME);
         lineItems.sort((InvoiceLineItem a, InvoiceLineItem b) -> {
             if (a.getConsultant().getName().equals(b.getConsultant().getName())) {
                 return a.getDate().compareTo(b.getDate());
@@ -214,6 +215,7 @@ public final class Invoice {
             String consultantB = b.getConsultant().getName().toString();
             return consultantA.compareTo(consultantB);
         });
+
         Iterator<InvoiceLineItem> lines = lineItems.iterator();
         StringBuilder report = new StringBuilder();
 
@@ -227,13 +229,14 @@ public final class Invoice {
                 InvoiceLineItem invoiceLineItem = lines.next();
                 String lineCharge = DECIMAL_DISPLAY.format((double) invoiceLineItem.getCharge());
                 report.append(String.format(LINE_ITEM, invoiceLineItem.getDate(), invoiceLineItem.getConsultant(), invoiceLineItem.getSkill(), invoiceLineItem.getHours(), lineCharge));
+                if (page == pages) {
+                    String totalCharges = DECIMAL_DISPLAY.format((double) getTotalCharges());
+                    report.append(String.format(TOTAL, getTotalHours(), totalCharges));
+                }
                 counter++;
             }
 
-            if (page == pages) {
-                String totalCharges = DECIMAL_DISPLAY.format((double) getTotalCharges());
-                report.append(String.format(TOTAL, getTotalHours(), totalCharges));
-            }
+
 
             report.append(invoiceFooter);
             invoiceFooter.incrementPageNumber();

@@ -91,6 +91,15 @@ public final class ConsultantTime {
     }
 
     /**
+     * Getter for skillType property.
+     *
+     * @return Value of skillType property.
+     */
+    public Skill getSkill() {
+        return this.skillType;
+    }
+
+    /**
      * Getter for hours property.
      *
      * @return Value of hours property.
