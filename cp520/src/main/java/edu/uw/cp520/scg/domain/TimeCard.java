@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  *
  * @author Jesse Ruth
  */
-public final class TimeCard {
+public final class TimeCard implements Comparable {
     /**
      * Format string for a line header on the time card.
      */
@@ -126,13 +126,9 @@ public final class TimeCard {
      * @return list of billable hours for the client.
      */
     public List<ConsultantTime> getBillableHoursForClient(String clientName) {
-        final ArrayList<ConsultantTime> billableHours = new ArrayList<>();
-        for (final ConsultantTime currentTime : consultingHours) {
-            if (clientName.equals(currentTime.getAccount().getName()) && currentTime.isBillable()) {
-                billableHours.add(currentTime);
-            }
-        }
-        return billableHours;
+        return consultingHours.stream()
+                .filter(consultantTime -> clientName.equals(consultantTime.getAccount().getName()) && consultantTime.isBillable())
+                .collect(Collectors.toUnmodifiableList());
     }
 
     /**
@@ -185,5 +181,17 @@ public final class TimeCard {
 
 
         return reportString.toString();
+    }
+
+    /**
+     * TimeCard's natural ordering should be in ascending order by beginning date, consultant,
+     * total billable hours and finally total non-billable hours
+     *
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

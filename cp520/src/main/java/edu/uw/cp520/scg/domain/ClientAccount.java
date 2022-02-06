@@ -8,7 +8,7 @@ import edu.uw.cp520.scg.util.PersonalName;
  *
  * @author Jesse Ruth
  */
-public final class ClientAccount implements Account {
+public final class ClientAccount implements Account, Comparable {
     /**
      * Holds value of property name.
      */
@@ -100,5 +100,15 @@ public final class ClientAccount implements Account {
                 ", contact=" + contact +
                 ", address=" + address +
                 '}';
+    }
+
+    /**
+     * The natural ordering of ClientAccount is ascending order by name, contact and finally address.
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }

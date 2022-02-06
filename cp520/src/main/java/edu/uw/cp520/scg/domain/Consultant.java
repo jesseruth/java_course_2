@@ -7,7 +7,7 @@ import edu.uw.cp520.scg.util.PersonalName;
  *
  * @author Jesse Ruth
  */
-public class Consultant {
+public class Consultant implements Comparable {
 
     /**
      * Hold value of personal Name
@@ -40,5 +40,15 @@ public class Consultant {
     @Override
     public String toString() {
         return name.toString();
+    }
+
+    /**
+     * The Consultant natural ordering is in ascending ordered by the consultant's name.
+     * @param o
+     * @return
+     */
+    @Override
+    public int compareTo(Object o) {
+        return 0;
     }
 }
