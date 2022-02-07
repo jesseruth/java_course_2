@@ -3,6 +3,7 @@ package edu.uw.cp520.scg.util;
 import edu.uw.cp520.scg.domain.Consultant;
 import edu.uw.cp520.scg.domain.TimeCard;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,7 @@ public class TimeCardListUtil {
      * @param timeCards the list of time cards to sort
      */
     public static void sortByStartDate(List<TimeCard> timeCards) {
+        timeCards.sort(Comparator.comparing(TimeCard::getWeekStartingDay));
     }
 
     /**
@@ -39,6 +41,7 @@ public class TimeCardListUtil {
      * @param timeCards the list of time cards to sort
      */
     public static void sortByConsultantName(List<TimeCard> timeCards) {
+        timeCards.sort(Comparator.comparing(TimeCard::getConsultant));
     }
 
     /**

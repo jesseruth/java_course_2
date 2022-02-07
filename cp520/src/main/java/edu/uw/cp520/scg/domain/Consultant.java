@@ -7,7 +7,7 @@ import edu.uw.cp520.scg.util.PersonalName;
  *
  * @author Jesse Ruth
  */
-public class Consultant implements Comparable {
+public class Consultant implements Comparable<Consultant> {
 
     /**
      * Hold value of personal Name
@@ -44,11 +44,12 @@ public class Consultant implements Comparable {
 
     /**
      * The Consultant natural ordering is in ascending ordered by the consultant's name.
-     * @param o
-     * @return
+     *
+     * @param consultant the Object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
      */
     @Override
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(final Consultant consultant) {
+        return this.getName().compareTo(consultant.getName());
     }
 }

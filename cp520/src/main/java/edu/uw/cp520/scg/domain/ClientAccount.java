@@ -8,7 +8,7 @@ import edu.uw.cp520.scg.util.PersonalName;
  *
  * @author Jesse Ruth
  */
-public final class ClientAccount implements Account, Comparable {
+public final class ClientAccount implements Account, Comparable<ClientAccount> {
     /**
      * Holds value of property name.
      */
@@ -104,11 +104,18 @@ public final class ClientAccount implements Account, Comparable {
 
     /**
      * The natural ordering of ClientAccount is ascending order by name, contact and finally address.
-     * @param o
-     * @return
+     *
+     * @param other the Client to be compared.
+     * @return a negative integer, zero, or a positive integer as this Client is less than,
+     * equal to, or greater than the specified Client.
      */
     @Override
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(ClientAccount other) {
+        if (!this.getName().equals(other.getName())) {
+            return this.getName().compareTo(other.getName());
+        } else if (!this.getContact().equals(other.getContact())) {
+            return this.getContact().compareTo(other.getContact());
+        }
+        return this.getAddress().compareTo(other.getAddress());
     }
 }

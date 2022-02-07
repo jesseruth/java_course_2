@@ -6,22 +6,31 @@ package edu.uw.cp520.scg.util;
  *
  * @author Jesse Ruth
  */
-public class Address {
-    /** The street number **/
+public class Address implements Comparable<Address> {
+    /**
+     * The street number
+     **/
     private final String streetNumber;
-    /** The city **/
+    /**
+     * The city
+     **/
     private final String city;
-    /** The state **/
+    /**
+     * The state
+     **/
     private final StateCode state;
-    /** The postal code **/
+    /**
+     * The postal code
+     **/
     private final String postalCode;
 
     /**
      * Construct an Address.
+     *
      * @param streetNumber the street number.
-     * @param city the city.
-     * @param state the state.
-     * @param postalCode the postal code.
+     * @param city         the city.
+     * @param state        the state.
+     * @param postalCode   the postal code.
      */
     public Address(String streetNumber,
                    String city,
@@ -71,7 +80,7 @@ public class Address {
 
     /**
      * Prints this address in the form:
-     *
+     * <p>
      * street number
      * city, state postal code
      *
@@ -109,5 +118,24 @@ public class Address {
         result = 31 * result + (state != null ? state.hashCode() : 0);
         result = 31 * result + (postalCode != null ? postalCode.hashCode() : 0);
         return result;
+    }
+
+    /**
+     * Orders by state, postalCode, city and streetNumber.
+     *
+     * @param address an address to compare to.
+     * @return a negative integer, zero, or a positive integer as this object is less than,
+     * equal to, or greater than the specified object.
+     */
+    @Override
+    public int compareTo(Address address) {
+        if (!this.getState().equals(address.getState())) {
+            return this.getState().compareTo(address.getState());
+        } else if (!this.getPostalCode().equals(address.getPostalCode())) {
+            return this.getPostalCode().compareTo(address.getPostalCode());
+        } else if (!this.getCity().equals(address.getCity())) {
+            return this.getCity().compareTo(address.getCity());
+        }
+        return this.getStreetNumber().compareTo(address.getStreetNumber());
     }
 }

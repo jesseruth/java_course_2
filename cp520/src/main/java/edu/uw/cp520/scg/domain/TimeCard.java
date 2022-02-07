@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
  *
  * @author Jesse Ruth
  */
-public final class TimeCard implements Comparable {
+public final class TimeCard implements Comparable<TimeCard> {
     /**
      * Format string for a line header on the time card.
      */
@@ -184,14 +184,26 @@ public final class TimeCard implements Comparable {
     }
 
     /**
+     * Compares this Consultant object with the specified object for order. Returns a negative
+     * integer, zero, or a positive integer as this object is less than, equal to, or greater than
+     * the specified object, the consultant name is used to perform the comparison.
+     * <p>
      * TimeCard's natural ordering should be in ascending order by beginning date, consultant,
      * total billable hours and finally total non-billable hours
      *
-     * @param o
-     * @return
+     * @param timeCard the timecard to be compared.
+     * @return a negative integer, zero, or a positive integer as this object is less than,
+     * equal to, or greater than the specified object.
      */
     @Override
-    public int compareTo(Object o) {
-        return 0;
+    public int compareTo(TimeCard timeCard) {
+        if (!timeCard.getWeekStartingDay().equals(this.getWeekStartingDay())) {
+            return this.getWeekStartingDay().compareTo(timeCard.getWeekStartingDay());
+        } else if (!timeCard.getConsultant().equals(this.getConsultant())) {
+            return this.getConsultant().compareTo(timeCard.getConsultant());
+        } else if (timeCard.getTotalBillableHours() != timeCard.getTotalBillableHours()) {
+            return Integer.compare(this.getTotalBillableHours(), timeCard.getTotalBillableHours());
+        }
+        return Integer.compare(this.getTotalNonBillableHours(), timeCard.getTotalNonBillableHours());
     }
 }

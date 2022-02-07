@@ -141,7 +141,11 @@ public final class Invoice {
      */
     public int getTotalHours() {
         log.debug("Calling get total hours");
-        return lineItems.stream().filter(invoiceLineItem -> invoiceLineItem.getDate().getYear() == invoiceYear && invoiceLineItem.getDate().getMonth() == getInvoiceMonth()).map(InvoiceLineItem::getHours).mapToInt(Integer::intValue).sum();
+        return lineItems.stream()
+                .filter(invoiceLineItem -> invoiceLineItem.getDate().getYear() == invoiceYear && invoiceLineItem.getDate().getMonth() == getInvoiceMonth())
+                .map(InvoiceLineItem::getHours)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     /**
@@ -151,7 +155,11 @@ public final class Invoice {
      */
     public int getTotalCharges() {
         log.debug("Calling get total charges");
-        return lineItems.stream().filter(invoiceLineItem -> invoiceLineItem.getDate().getYear() == invoiceYear && invoiceLineItem.getDate().getMonth() == getInvoiceMonth()).map(InvoiceLineItem::getCharge).mapToInt(Integer::intValue).sum();
+        return lineItems.stream()
+                .filter(invoiceLineItem -> invoiceLineItem.getDate().getYear() == invoiceYear && invoiceLineItem.getDate().getMonth() == getInvoiceMonth())
+                .map(InvoiceLineItem::getCharge)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     /**
@@ -173,14 +181,19 @@ public final class Invoice {
      */
     public void extractLineItems(final TimeCard timeCard) {
         log.debug("Extract line items {}", timeCard.toString());
-        timeCard.getConsultingHours().stream().peek(consultantTime -> {
-            log.debug("Peak consultantTime {}", consultantTime);
-            log.debug("Is billable: {}", consultantTime.isBillable());
-        }).filter(ConsultantTime::isBillable).filter(consultantTime -> getClientAccount().equals(consultantTime.getAccount())).filter(consultantTime -> consultantTime.getDate().getYear() == invoiceYear).filter(consultantTime -> consultantTime.getDate().getMonth() == invoiceMonth).forEach(consultantTime -> {
-            log.debug("Adding Skill: {}", consultantTime.getSkillType());
-            InvoiceLineItem invoiceLineItem = new InvoiceLineItem(consultantTime.getDate(), timeCard.getConsultant(), consultantTime.getSkillType(), consultantTime.getHours());
-            addLineItem(invoiceLineItem);
-        });
+        timeCard.getConsultingHours()
+                .stream()
+                .peek(consultantTime -> {
+                    log.debug("Peak consultantTime {}", consultantTime);
+                    log.debug("Is billable: {}", consultantTime.isBillable());
+                }).filter(ConsultantTime::isBillable)
+                .filter(consultantTime -> getClientAccount().equals(consultantTime.getAccount()))
+                .filter(consultantTime -> consultantTime.getDate().getYear() == invoiceYear)
+                .filter(consultantTime -> consultantTime.getDate().getMonth() == invoiceMonth)
+                .forEach(consultantTime -> {
+                    log.debug("Adding Skill: {}", consultantTime.getSkillType());
+                    addLineItem(new InvoiceLineItem(consultantTime.getDate(), timeCard.getConsultant(), consultantTime.getSkillType(), consultantTime.getHours()));
+                });
     }
 
     /**
@@ -201,23 +214,15 @@ public final class Invoice {
      */
     public String toReportString() {
         log.debug("Calling toReportString");
-        int totalRows = lineItems.size() + 1; // for total
-        int pages = totalRows <= 5 ? 1 : (lineItems.size() / 5) + 1;
-        log.debug("Total Pages {}", pages);
-
         final InvoiceHeader invoiceHeader = new InvoiceHeader(BIZ_NAME, BIZ_ADDRESS, client, LocalDate.now(), startDate);
         final InvoiceFooter invoiceFooter = new InvoiceFooter(BIZ_NAME);
-        lineItems.sort((InvoiceLineItem a, InvoiceLineItem b) -> {
-            if (a.getConsultant().getName().equals(b.getConsultant().getName())) {
-                return a.getDate().compareTo(b.getDate());
-            }
-            String consultantA = a.getConsultant().getName().toString();
-            String consultantB = b.getConsultant().getName().toString();
-            return consultantA.compareTo(consultantB);
-        });
+        final int totalRows = lineItems.size() + 1; // for total
+        final int pages = totalRows <= 5 ? 1 : (lineItems.size() / 5) + 1;
 
-        Iterator<InvoiceLineItem> lines = lineItems.iterator();
-        StringBuilder report = new StringBuilder();
+        log.debug("Total Pages {}", pages);
+
+        final Iterator<InvoiceLineItem> lines = lineItems.iterator();
+        final StringBuilder report = new StringBuilder();
 
         IntStream.rangeClosed(1, pages).forEach(page -> {
             report.append(invoiceHeader);
@@ -226,15 +231,14 @@ public final class Invoice {
             int counter = 1;
 
             while (counter <= 5 && lines.hasNext()) {
-                InvoiceLineItem invoiceLineItem = lines.next();
-                String lineCharge = DECIMAL_DISPLAY.format((double) invoiceLineItem.getCharge());
+                final InvoiceLineItem invoiceLineItem = lines.next();
+                final String lineCharge = DECIMAL_DISPLAY.format((double) invoiceLineItem.getCharge());
                 report.append(String.format(LINE_ITEM, invoiceLineItem.getDate(), invoiceLineItem.getConsultant(), invoiceLineItem.getSkill(), invoiceLineItem.getHours(), lineCharge));
-
                 counter++;
             }
 
             if (page == pages) {
-                String totalCharges = DECIMAL_DISPLAY.format((double) getTotalCharges());
+                final String totalCharges = DECIMAL_DISPLAY.format((double) getTotalCharges());
                 report.append(String.format(TOTAL, getTotalHours(), totalCharges));
             }
 

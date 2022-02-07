@@ -23,6 +23,6 @@ public final class TimeCardConsultantComparator implements Comparator<TimeCard> 
      */
     @Override
     public int compare(TimeCard t1, TimeCard t2) {
-        return 0;
+        return t1.compareTo(t2);
     }
 }
