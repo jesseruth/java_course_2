@@ -3,6 +3,8 @@ package edu.uw.cp520.scg.domain;
 import edu.uw.cp520.scg.util.Address;
 import edu.uw.cp520.scg.util.PersonalName;
 
+import java.util.Comparator;
+
 /**
  * A billable Account that additionally has client contact information and an address.
  *
@@ -111,11 +113,9 @@ public final class ClientAccount implements Account, Comparable<ClientAccount> {
      */
     @Override
     public int compareTo(ClientAccount other) {
-        if (!this.getName().equals(other.getName())) {
-            return this.getName().compareTo(other.getName());
-        } else if (!this.getContact().equals(other.getContact())) {
-            return this.getContact().compareTo(other.getContact());
-        }
-        return this.getAddress().compareTo(other.getAddress());
+        return Comparator.comparing(ClientAccount::getName)
+                .thenComparing(ClientAccount::getContact)
+                .thenComparing(ClientAccount::getAddress)
+                .compare(this, other);
     }
 }

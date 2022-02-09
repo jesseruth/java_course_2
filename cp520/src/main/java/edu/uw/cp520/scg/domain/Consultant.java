@@ -2,6 +2,8 @@ package edu.uw.cp520.scg.domain;
 
 import edu.uw.cp520.scg.util.PersonalName;
 
+import java.util.Comparator;
+
 /**
  * A consultant for the SCG, just has a PersonalName.
  *
@@ -45,11 +47,12 @@ public class Consultant implements Comparable<Consultant> {
     /**
      * The Consultant natural ordering is in ascending ordered by the consultant's name.
      *
-     * @param consultant the Object to be compared.
+     * @param other the Object to be compared.
      * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than the specified object.
      */
     @Override
-    public int compareTo(final Consultant consultant) {
-        return this.getName().compareTo(consultant.getName());
+    public int compareTo(final Consultant other) {
+        return Comparator.comparing(Consultant::getName)
+                .compare(this, other);
     }
 }

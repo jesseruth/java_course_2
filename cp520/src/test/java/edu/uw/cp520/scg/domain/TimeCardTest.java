@@ -153,7 +153,7 @@ class TimeCardTest {
 
         otherTimeCard.addConsultantTime(consultantTime2);
         actual = timeCard.compareTo(otherTimeCard);
-        assertEquals(0, actual);
+        assertTrue(actual < 0);
 
         actual = timeCard.compareTo(thirdTimeCard);
         assertTrue(actual > 0);

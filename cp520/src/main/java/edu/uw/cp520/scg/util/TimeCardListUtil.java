@@ -3,7 +3,7 @@ package edu.uw.cp520.scg.util;
 import edu.uw.cp520.scg.domain.Consultant;
 import edu.uw.cp520.scg.domain.TimeCard;
 
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
  * @author Jesse Ruth
  */
 public class TimeCardListUtil {
+    private static final int DAYS_PER_WEEK = 6;
+    private static final TimeCardConsultantComparator consultantComparator = new TimeCardConsultantComparator();
+
     /**
      * Get a list of TimeCards for the specified consultant.
      *
@@ -32,7 +35,7 @@ public class TimeCardListUtil {
      * @param timeCards the list of time cards to sort
      */
     public static void sortByStartDate(List<TimeCard> timeCards) {
-        timeCards.sort(Comparator.comparing(TimeCard::getWeekStartingDay));
+        Collections.sort(timeCards);
     }
 
     /**
@@ -41,7 +44,7 @@ public class TimeCardListUtil {
      * @param timeCards the list of time cards to sort
      */
     public static void sortByConsultantName(List<TimeCard> timeCards) {
-        timeCards.sort(Comparator.comparing(TimeCard::getConsultant));
+        Collections.sort(timeCards, consultantComparator);
     }
 
     /**
@@ -52,7 +55,10 @@ public class TimeCardListUtil {
      * @param dateRange The DateRange within which the dates of the returned TimeCards must fall.
      * @return a list of TimeCards having dates fall within the date range.
      */
-    public static List<TimeCard> getTimeCardsForDateRange(List<TimeCard> timeCards, DateRange dateRange) {
-        return timeCards.stream().collect(Collectors.toUnmodifiableList());
+    public static List<TimeCard> getTimeCardsForDateRange(final List<TimeCard> timeCards, final DateRange dateRange) {
+        return timeCards.stream().
+                filter(timeCard -> dateRange.isInRange(timeCard.getWeekStartingDay()) ||
+                        dateRange.isInRange(timeCard.getWeekStartingDay().plusDays(DAYS_PER_WEEK)))
+                .collect(Collectors.toUnmodifiableList());
     }
 }

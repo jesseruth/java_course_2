@@ -47,7 +47,8 @@ public final class DateRange {
      * @param year
      */
     DateRange(Month month, int year) {
-        this(LocalDate.of(year, month, 1), LocalDate.of(year, month, 1));
+        startDate = LocalDate.of(year, month, 1);
+        endDate = startDate.plusDays(startDate.lengthOfMonth() - 1L);
     }
 
     /**

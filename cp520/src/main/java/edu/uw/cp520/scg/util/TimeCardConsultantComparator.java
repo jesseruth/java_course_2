@@ -23,6 +23,10 @@ public final class TimeCardConsultantComparator implements Comparator<TimeCard> 
      */
     @Override
     public int compare(TimeCard t1, TimeCard t2) {
-        return t1.compareTo(t2);
+        return Comparator.comparing(TimeCard::getConsultant)
+                .thenComparing(TimeCard::getWeekStartingDay)
+                .thenComparing(TimeCard::getTotalBillableHours)
+                .thenComparing(TimeCard::getTotalNonBillableHours)
+                .compare(t1, t2);
     }
 }

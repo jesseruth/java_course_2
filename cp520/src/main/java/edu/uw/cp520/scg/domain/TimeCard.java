@@ -3,6 +3,7 @@ package edu.uw.cp520.scg.domain;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -191,19 +192,16 @@ public final class TimeCard implements Comparable<TimeCard> {
      * TimeCard's natural ordering should be in ascending order by beginning date, consultant,
      * total billable hours and finally total non-billable hours
      *
-     * @param timeCard the timecard to be compared.
+     * @param other the timecard to be compared.
      * @return a negative integer, zero, or a positive integer as this object is less than,
      * equal to, or greater than the specified object.
      */
     @Override
-    public int compareTo(TimeCard timeCard) {
-        if (!timeCard.getWeekStartingDay().equals(this.getWeekStartingDay())) {
-            return this.getWeekStartingDay().compareTo(timeCard.getWeekStartingDay());
-        } else if (!timeCard.getConsultant().equals(this.getConsultant())) {
-            return this.getConsultant().compareTo(timeCard.getConsultant());
-        } else if (timeCard.getTotalBillableHours() != timeCard.getTotalBillableHours()) {
-            return Integer.compare(this.getTotalBillableHours(), timeCard.getTotalBillableHours());
-        }
-        return Integer.compare(this.getTotalNonBillableHours(), timeCard.getTotalNonBillableHours());
+    public int compareTo(TimeCard other) {
+        return Comparator.comparing(TimeCard::getWeekStartingDay)
+                .thenComparing(TimeCard::getConsultant)
+                .thenComparing(TimeCard::getTotalHours)
+                .thenComparing(TimeCard::getTotalNonBillableHours)
+                .compare(this, other);
     }
 }

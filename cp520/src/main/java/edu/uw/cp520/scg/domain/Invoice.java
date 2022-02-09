@@ -12,6 +12,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.IntStream;
 
@@ -181,13 +182,12 @@ public final class Invoice {
      */
     public void extractLineItems(final TimeCard timeCard) {
         log.debug("Extract line items {}", timeCard.toString());
-        timeCard.getConsultingHours()
-                .stream()
+        final List<ConsultantTime> billableHours = timeCard.getBillableHoursForClient(client.getName());
+        billableHours.stream()
                 .peek(consultantTime -> {
                     log.debug("Peak consultantTime {}", consultantTime);
                     log.debug("Is billable: {}", consultantTime.isBillable());
-                }).filter(ConsultantTime::isBillable)
-                .filter(consultantTime -> getClientAccount().equals(consultantTime.getAccount()))
+                })
                 .filter(consultantTime -> consultantTime.getDate().getYear() == invoiceYear)
                 .filter(consultantTime -> consultantTime.getDate().getMonth() == invoiceMonth)
                 .forEach(consultantTime -> {

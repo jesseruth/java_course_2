@@ -1,5 +1,6 @@
 package edu.uw.cp520.scg.util;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 /**
@@ -8,10 +9,6 @@ import java.util.Objects;
  * @author Jesse Ruth
  */
 public final class PersonalName implements Comparable<PersonalName> {
-    /**
-     * String constant for NLN - No Last Name
-     **/
-    private static final int HASH_FACTOR = 37;
     /**
      * String constant for NLN - No Last Name
      **/
@@ -67,7 +64,13 @@ public final class PersonalName implements Comparable<PersonalName> {
      */
     @Override
     public String toString() {
-        return (lastName + ", " + firstName + " " + middleName).trim();
+        final StringBuilder output = new StringBuilder();
+        output.append(lastName);
+        output.append(", ");
+        output.append(firstName);
+        output.append(" ");
+        output.append(middleName);
+        return output.toString();
     }
 
     /**
@@ -148,18 +151,15 @@ public final class PersonalName implements Comparable<PersonalName> {
      * and finally middle name. Returns a negative integer, zero, or a positive integer as this
      * object is less than, equal to, or greater than the specified object.
      *
-     * @param personalName the Object to be compared.
+     * @param other the Object to be compared.
      * @return a negative integer, zero, or a positive integer as this object is less than, equal
      * to, or greater than the specified object.
      */
     @Override
-    public int compareTo(PersonalName personalName) {
-        if (!this.lastName.equals(personalName.getLastName())) {
-            return this.lastName.compareTo(personalName.getLastName());
-        } else if (!this.firstName.equals(personalName.getFirstName())) {
-            return this.firstName.compareTo(personalName.getFirstName());
-
-        }
-        return this.getMiddleName().compareTo(personalName.getMiddleName());
+    public int compareTo(PersonalName other) {
+        return Comparator.comparing(PersonalName::getFirstName)
+                .thenComparing(PersonalName::getLastName)
+                .thenComparing(PersonalName::getMiddleName)
+                .compare(this, other);
     }
 }

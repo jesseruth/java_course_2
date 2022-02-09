@@ -68,7 +68,7 @@ class ClientAccountTest {
         actual = otherClientAccount.compareTo(clientAccount);
         assertEquals(0, actual);
         actual = otherClientAccount.compareTo(new ClientAccount(accountName, new PersonalName("Jim", "Bob"), address));
-        assertTrue( actual > 0);
+        assertTrue( actual < 0);
         actual = otherClientAccount.compareTo(new ClientAccount("Other Account", contact, address));
         assertTrue( actual < 0);
     }

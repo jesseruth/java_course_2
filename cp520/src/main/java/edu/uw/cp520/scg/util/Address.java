@@ -1,5 +1,7 @@
 package edu.uw.cp520.scg.util;
 
+import java.util.Comparator;
+
 /**
  * A simple mailing address. Does no validity checking for things like valid states or postal codes.
  * Instances of this class are immutable.
@@ -123,19 +125,16 @@ public class Address implements Comparable<Address> {
     /**
      * Orders by state, postalCode, city and streetNumber.
      *
-     * @param address an address to compare to.
+     * @param other an address to compare to.
      * @return a negative integer, zero, or a positive integer as this object is less than,
      * equal to, or greater than the specified object.
      */
     @Override
-    public int compareTo(Address address) {
-        if (!this.getState().equals(address.getState())) {
-            return this.getState().compareTo(address.getState());
-        } else if (!this.getPostalCode().equals(address.getPostalCode())) {
-            return this.getPostalCode().compareTo(address.getPostalCode());
-        } else if (!this.getCity().equals(address.getCity())) {
-            return this.getCity().compareTo(address.getCity());
-        }
-        return this.getStreetNumber().compareTo(address.getStreetNumber());
+    public int compareTo(final Address other) {
+        return Comparator.comparing(Address::getState)
+                .thenComparing(Address::getPostalCode)
+                .thenComparing(Address::getCity)
+                .thenComparing(Address::getStreetNumber)
+                .compare(this, other);
     }
 }
