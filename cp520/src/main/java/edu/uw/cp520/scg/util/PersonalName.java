@@ -1,5 +1,6 @@
 package edu.uw.cp520.scg.util;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Objects;
 
@@ -8,7 +9,7 @@ import java.util.Objects;
  *
  * @author Jesse Ruth
  */
-public final class PersonalName implements Comparable<PersonalName> {
+public final class PersonalName implements Comparable<PersonalName>, Serializable {
     /**
      * String constant for NLN - No Last Name
      **/

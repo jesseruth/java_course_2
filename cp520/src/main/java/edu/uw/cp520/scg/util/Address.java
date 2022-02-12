@@ -1,5 +1,6 @@
 package edu.uw.cp520.scg.util;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Comparator;
  *
  * @author Jesse Ruth
  */
-public class Address implements Comparable<Address> {
+public class Address implements Comparable<Address>, Serializable {
     /**
      * The street number
      **/

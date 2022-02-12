@@ -3,6 +3,7 @@ package edu.uw.cp520.scg.domain;
 import edu.uw.cp520.scg.util.Address;
 import edu.uw.cp520.scg.util.PersonalName;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Comparator;
  *
  * @author Jesse Ruth
  */
-public final class ClientAccount implements Account, Comparable<ClientAccount> {
+public final class ClientAccount implements Account, Comparable<ClientAccount>, Serializable {
     /**
      * Holds value of property name.
      */

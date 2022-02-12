@@ -1,5 +1,6 @@
 package edu.uw.cp520.scg.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
  *
  * @author Jesse Ruth
  */
-public final class TimeCard implements Comparable<TimeCard> {
+public final class TimeCard implements Comparable<TimeCard>, Serializable {
     /**
      * Format string for a line header on the time card.
      */

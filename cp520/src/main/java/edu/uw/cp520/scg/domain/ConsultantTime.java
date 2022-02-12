@@ -1,5 +1,6 @@
 package edu.uw.cp520.scg.domain;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -9,7 +10,7 @@ import java.util.Objects;
  *
  * @author Jesse Ruth
  */
-public final class ConsultantTime {
+public final class ConsultantTime implements Serializable {
 
     /**
      * Holds the value for the skill property.
