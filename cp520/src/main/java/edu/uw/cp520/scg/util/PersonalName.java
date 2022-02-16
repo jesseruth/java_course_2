@@ -10,6 +10,8 @@ import java.util.Objects;
  * @author Jesse Ruth
  */
 public final class PersonalName implements Comparable<PersonalName>, Serializable {
+    private static final long serialVersionUID = 301409671298043668L;
+
     /**
      * String constant for NLN - No Last Name
      **/

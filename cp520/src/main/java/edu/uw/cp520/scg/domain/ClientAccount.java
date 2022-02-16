@@ -12,6 +12,8 @@ import java.util.Comparator;
  * @author Jesse Ruth
  */
 public final class ClientAccount implements Account, Comparable<ClientAccount>, Serializable {
+    private static final long serialVersionUID = 5813422724954601551L;
+
     /**
      * Holds value of property name.
      */

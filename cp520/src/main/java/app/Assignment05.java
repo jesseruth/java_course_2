@@ -10,14 +10,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Read serialized data and print timecards and invoices.
+ *
+ * @author Jesse Ruth
+ */
 public class Assignment05 {
-    /** Character encoding to use. */
+    /**
+     * Character encoding to use.
+     */
     private static final String ENCODING = "ISO-8859-1";
 
-    /** This class' logger. */
+    /**
+     * This class' logger.
+     */
     private static final Logger log = LoggerFactory.getLogger(Assignment05.class);
 
     /**
@@ -25,6 +33,7 @@ public class Assignment05 {
      */
     private Assignment05() {
     }
+
 
     /**
      * The application method.
@@ -34,10 +43,14 @@ public class Assignment05 {
      */
     public static void main(final String[] args) throws Exception {
         // Create lists to be populated by factory
-        final List<ClientAccount> accounts = new ArrayList<>();
-        final List<Consultant> consultants = new ArrayList<>();
-        final List<TimeCard> timeCards = new ArrayList<>();
-        ListFactory.populateLists(accounts, consultants, timeCards);
+        @SuppressWarnings("unchecked")
+        final List<ClientAccount> accounts = (List<ClientAccount>) Util.readObject(InitLists.CLIENTS_SER);
+        @SuppressWarnings("unchecked")
+        final List<Consultant> consultants = (List<Consultant>) Util.readObject(InitLists.CONSULTANTS_SER);
+        @SuppressWarnings("unchecked")
+        final List<TimeCard> timeCards = (List<TimeCard>) Util.readObject(InitLists.TIME_CARDS_SER);
+
+
         // Print them
         ListFactory.printTimeCards(timeCards);
 
@@ -68,6 +81,7 @@ public class Assignment05 {
                 consoleWrtr.printf("  %s, %s%n", tc.getWeekStartingDay(), tc.getConsultant());
             }
 
+            assert accounts != null;
             accounts.clear();
             consultants.clear();
             timeCards.clear();

@@ -10,6 +10,9 @@ import java.util.Comparator;
  * @author Jesse Ruth
  */
 public class Address implements Comparable<Address>, Serializable {
+
+    private static final long serialVersionUID = -3505598498871347327L;
+
     /**
      * The street number
      **/

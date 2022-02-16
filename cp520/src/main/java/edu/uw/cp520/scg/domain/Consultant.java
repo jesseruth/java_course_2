@@ -4,7 +4,10 @@ import edu.uw.cp520.scg.util.PersonalName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.InvalidObjectException;
+import java.io.ObjectInputStream;
+import java.io.ObjectStreamField;
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
@@ -14,16 +17,15 @@ import java.util.Comparator;
  */
 public class Consultant implements Comparable<Consultant>, Serializable {
 
+    private static final long serialVersionUID = -7761113182555737926L;
+
     /**
      * This class' logger.
      */
     private static final Logger log = LoggerFactory.getLogger(Consultant.class);
-
-
     private static final ObjectStreamField[] serialPersistentFields = {
             new ObjectStreamField("name", PersonalName.class)
     };
-
     /**
      * Hold value of personal Name
      **/
@@ -70,31 +72,68 @@ public class Consultant implements Comparable<Consultant>, Serializable {
     }
 
     /**
-     * Reads the object fields from stream.
+     * Writes object proxy to stream.
      *
-     * @param ois the stream to read the object from
-     * @throws ClassNotFoundException if the read object's class can't be loaded
-     * @throws IOException            if any I/O exceptions occur
+     * @return Serialization proxy.
      */
-    private void readObject(final ObjectInputStream ois) throws ClassNotFoundException, IOException {
-        log.info("Reading into new version");
-        ObjectInputStream.GetField fields = ois.readFields();
-        var n = fields.get("name", null);
-        if (n != null) {
-            name = (PersonalName) n;
+    private Object writeReplace() {
+        return new SerializationProxy(this);
+    }
+
+    /**
+     * Throws InvalidObjectException
+     *
+     * @param ois not used
+     * @throws InvalidObjectException always
+     */
+    private void readObject(final ObjectInputStream ois) throws InvalidObjectException {
+        throw new InvalidObjectException("Must use proxy");
+    }
+
+    private static final class SerializationProxy implements Serializable {
+        private static final long serialVersionUID = 5813422724954601551L;
+
+        /**
+         * last name
+         **/
+        private final String x;
+
+        /**
+         * first name
+         **/
+        private final String y;
+
+        /**
+         * middle name
+         **/
+        private final String z;
+
+        SerializationProxy(final Consultant consultant) {
+            final String msg = String.format("Serializing consultant: %s", consultant.getName());
+            log.info(msg);
+            final PersonalName name = consultant.getName();
+            x = name.getLastName();
+            y = name.getFirstName();
+            z = name.getMiddleName();
+        }
+
+        private Object readResolve() {
+            final String msg = String.format("De-serialized consultant: %s %s %S", z, y, z);
+            log.info(msg);
+            return new Consultant(new PersonalName(y, z, x));
         }
     }
 
     /**
-     * Writes the object fields to stream.
-     *
-     * @param oos the stream to write the object to
-     * @throws IOException if any I/O exceptions occur
+     * {@inheritDoc}
      */
-    private void writeObject(final ObjectOutputStream oos) throws IOException {
-        log.info("Writing from new version");
-        ObjectOutputStream.PutField fields = oos.putFields();
-        fields.put("name", getName());
-        oos.writeFields();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Consultant)) return false;
+
+        Consultant that = (Consultant) o;
+
+        return getName().equals(that.getName());
     }
 }

@@ -22,7 +22,6 @@ class ConsultantTimeTest {
             new ConsultantTime(localDate, account, Skill.PROJECT_MANAGER, 0);
             fail();
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             assertEquals(errorMessage, e.getMessage());
         }
     }
@@ -59,7 +58,6 @@ class ConsultantTimeTest {
             consultantTime.setHours(0);
             fail();
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
             assertEquals(errorMessage, e.getMessage());
         }
     }

@@ -7,29 +7,29 @@ import edu.uw.ext.util.ListFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Create serialized lists.
+ *
+ * @author Jesse Ruth
+ */
 public class InitLists {
     public static final String TIME_CARDS_SER = "TimeCardList.ser";
     public static final String CLIENTS_SER = "ClientList.ser";
+    public static final String CONSULTANTS_SER = "ConsultantList.ser";
     /**
      * This class' logger.
      */
     private static final Logger log = LoggerFactory.getLogger(InitLists.class);
 
     /**
-     * Character encoding to use.
-     */
-    private static final String ENCODING = "ISO-8859-1";
-    /**
      * Prevent instantiation.
      */
     private InitLists() {
     }
+
 
     /**
      * The application method.
@@ -43,25 +43,9 @@ public class InitLists {
         final List<Consultant> consultants = new ArrayList<>();
         final List<TimeCard> timeCards = new ArrayList<>();
         ListFactory.populateLists(accounts, consultants, timeCards);
-        log.info("\n{}\n\n{}\n\n{}", accounts, consultants, timeCards);
-
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(
-                    new FileOutputStream(TIME_CARDS_SER)
-            );
-            out.writeObject(timeCards);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        try {
-            ObjectOutputStream out = new ObjectOutputStream(
-                    new FileOutputStream(CLIENTS_SER)
-            );
-            out.writeObject(accounts);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
+        log.info("Populating Lists");
+        Util.writeObject(TIME_CARDS_SER, timeCards);
+        Util.writeObject(CONSULTANTS_SER, consultants);
+        Util.writeObject(CLIENTS_SER, accounts);
     }
 }

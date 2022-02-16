@@ -1,5 +1,6 @@
 package edu.uw.cp520.scg.util;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Month;
 
@@ -8,7 +9,10 @@ import java.time.Month;
  *
  * @author Jesse Ruth
  */
-public final class DateRange {
+public final class DateRange implements Serializable {
+
+    private static final long serialVersionUID = -1264086585034792317L;
+
     /**
      * The end date of this range.
      */
