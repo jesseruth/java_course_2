@@ -8,7 +8,6 @@ public class Util {
      *
      * @param fileName Filename to write
      * @param object   Object to write
-     * @param object   Type of object.
      */
     public static void writeObject(final String fileName, Object object) {
         try {

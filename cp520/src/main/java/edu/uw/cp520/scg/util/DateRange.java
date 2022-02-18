@@ -56,7 +56,7 @@ public final class DateRange implements Serializable {
     }
 
     /**
-     * Returns true if the specified date is within the range start date <= date <= end date.
+     * Returns true if the specified date is within the range.
      *
      * @param date A date.
      * @return True if in range.
