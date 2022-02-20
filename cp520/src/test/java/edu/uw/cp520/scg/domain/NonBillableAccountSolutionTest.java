@@ -9,11 +9,12 @@ import org.junit.jupiter.api.Test;
  */
 
 public final class NonBillableAccountSolutionTest {
-    /**
-     * Tests the getName method.
-     */
-    @Test
-    public void testGetName() {
-        assertEquals("Vacation", NonBillableAccount.VACATION.getName());
-    }
+
+  /**
+   * Tests the getName method.
+   */
+  @Test
+  public void testGetName() {
+    assertEquals("Vacation", NonBillableAccount.VACATION.getName());
+  }
 }

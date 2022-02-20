@@ -1,13 +1,12 @@
 package edu.uw.cp520.scg.beans;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
 import java.util.EventListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Approves or rejects compensation changes. Listens for PropertyChangeEvents on the payRate
@@ -16,31 +15,34 @@ import java.util.EventListener;
  *
  * @author Jesse Ruth
  */
-public class CompensationManager implements PropertyChangeListener, VetoableChangeListener, EventListener {
-    private static final Logger log = LoggerFactory.getLogger(CompensationManager.class);
+public class CompensationManager
+  implements PropertyChangeListener, VetoableChangeListener, EventListener {
 
-    public CompensationManager() {
-        log.info("Create new CompensationManager");
-    }
+  private static final Logger log = LoggerFactory.getLogger(CompensationManager.class);
 
-    /**
-     * Processes to final pay rate change.
-     *
-     * @param propertyChangeEvent a change event for the payRate property
-     */
-    @Override
-    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        log.info("propertyChange {}", propertyChangeEvent);
-    }
+  public CompensationManager() {
+    log.info("Create new CompensationManager");
+  }
 
-    /**
-     * Rejects any raise over 5%.
-     *
-     * @param propertyChangeEvent a vetoable change event for the payRate property
-     * @throws PropertyVetoException if the change is vetoed
-     */
-    @Override
-    public void vetoableChange(PropertyChangeEvent propertyChangeEvent) throws PropertyVetoException {
-        log.info("vetoableChange {}", propertyChangeEvent);
-    }
+  /**
+   * Processes to final pay rate change.
+   *
+   * @param propertyChangeEvent a change event for the payRate property
+   */
+  @Override
+  public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+    log.info("propertyChange {}", propertyChangeEvent);
+  }
+
+  /**
+   * Rejects any raise over 5%.
+   *
+   * @param propertyChangeEvent a vetoable change event for the payRate property
+   * @throws PropertyVetoException if the change is vetoed
+   */
+  @Override
+  public void vetoableChange(PropertyChangeEvent propertyChangeEvent)
+    throws PropertyVetoException {
+    log.info("vetoableChange {}", propertyChangeEvent);
+  }
 }
