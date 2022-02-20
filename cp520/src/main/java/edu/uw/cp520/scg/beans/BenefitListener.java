@@ -1,11 +1,38 @@
 package edu.uw.cp520.scg.beans;
 
-public interface BenefitListener {
-    void medicalEnrollment(BenefitEvent evnt);
+import java.util.EventListener;
 
-    void medicalCancellation(BenefitEvent evnt);
+/**
+ * Interface for accepting notification of consultant changes in medical and dental enrollment.
+ *
+ * @author Jesse Ruth
+ */
+public interface BenefitListener extends EventListener {
+    /**
+     * Invoked when a consultant enrolls in medical.
+     *
+     * @param event a Benefit event
+     */
+    void medicalEnrollment(BenefitEvent event);
 
-    void dentalEnrollment(BenefitEvent evnt);
+    /**
+     * Invoked when a consultant is cancels medical.
+     *
+     * @param event a Benefit event
+     */
+    void medicalCancellation(BenefitEvent event);
 
-    void dentalCancellation(BenefitEvent evnt);
+    /**
+     * Invoked when a consultant enrolls in dental.
+     *
+     * @param event a Benefit event
+     */
+    void dentalEnrollment(BenefitEvent event);
+
+    /**
+     * Invoked when a consultant cancels dental.
+     *
+     * @param event a Benefit event
+     */
+    void dentalCancellation(BenefitEvent event);
 }
