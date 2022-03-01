@@ -221,12 +221,6 @@ class TimeCardTest {
   }
 
   @Test
-  void toReportString() {
-    final String actual = timeCard.toReportString();
-    assertEquals(1053, actual.length());
-  }
-
-  @Test
   void testCompareTo() {
     final ConsultantTime consultantTime1 = new ConsultantTime(
       startDay2,
