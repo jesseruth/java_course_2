@@ -4,7 +4,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyVetoException;
 import java.beans.VetoableChangeListener;
-import java.util.EventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,14 +14,13 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jesse Ruth
  */
-public class CompensationManager
-  implements PropertyChangeListener, VetoableChangeListener, EventListener {
+public final class CompensationManager
+  implements PropertyChangeListener, VetoableChangeListener {
 
+  /**
+   * Da logger.
+   */
   private static final Logger log = LoggerFactory.getLogger(CompensationManager.class);
-
-  public CompensationManager() {
-    log.info("Create new CompensationManager");
-  }
 
   /**
    * Processes to final pay rate change.
@@ -30,8 +28,18 @@ public class CompensationManager
    * @param propertyChangeEvent a change event for the payRate property
    */
   @Override
-  public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+  public void propertyChange(final PropertyChangeEvent propertyChangeEvent) {
     log.info("propertyChange {}", propertyChangeEvent);
+    if (
+      StaffConsultant.PAY_RATE_PROPERTY_NAME.equals(propertyChangeEvent.getPropertyName())
+    ) {
+      log.info(
+        "Pay Rate Changed from {} to {} for {}",
+        propertyChangeEvent.getOldValue(),
+        propertyChangeEvent.getNewValue(),
+        ((StaffConsultant) propertyChangeEvent.getSource()).getName()
+      );
+    }
   }
 
   /**
@@ -41,8 +49,26 @@ public class CompensationManager
    * @throws PropertyVetoException if the change is vetoed
    */
   @Override
-  public void vetoableChange(PropertyChangeEvent propertyChangeEvent)
+  public void vetoableChange(final PropertyChangeEvent propertyChangeEvent)
     throws PropertyVetoException {
     log.info("vetoableChange {}", propertyChangeEvent);
+    if (
+      StaffConsultant.PAY_RATE_PROPERTY_NAME.equals(propertyChangeEvent.getPropertyName())
+    ) {
+      final int oldValue = (Integer) propertyChangeEvent.getOldValue();
+      final int newValue = (Integer) propertyChangeEvent.getNewValue();
+      final int MAX_RATE = 105;
+      final int PERCENT = 100;
+      if (newValue * PERCENT > oldValue * MAX_RATE) {
+        throw new PropertyVetoException("Amount exceed allowed %", propertyChangeEvent);
+      }
+
+      log.info(
+        "Pay Rate Changed from {} to {} for {}",
+        propertyChangeEvent.getOldValue(),
+        propertyChangeEvent.getNewValue(),
+        ((StaffConsultant) propertyChangeEvent.getSource()).getName()
+      );
+    }
   }
 }

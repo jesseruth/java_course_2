@@ -15,7 +15,24 @@ import org.slf4j.LoggerFactory;
  */
 public final class BenefitEvent extends EventObject {
 
+  /**
+   * serial version UID
+   */
+  private static final long serialVersionUID = 23412123L;
+
+  /**
+   * Da Logger;
+   */
   private static final Logger log = LoggerFactory.getLogger(BenefitEvent.class);
+
+  /**
+   * Enrolling in medical
+   */
+  private Optional<Boolean> enrolledMedical;
+  /**
+   * Enrolling in dental
+   */
+  private Optional<Boolean> enrolledDental;
 
   /**
    * the consultant being terminated
@@ -29,11 +46,19 @@ public final class BenefitEvent extends EventObject {
   /**
    * @param source the event source
    */
-  private BenefitEvent(Object source, Consultant consultant, LocalDate effectiveDate) {
+  private BenefitEvent(
+    final Object source,
+    final Consultant consultant,
+    final LocalDate effectiveDate,
+    final Optional<Boolean> enrolledMedical,
+    final Optional<Boolean> enrolledDental
+  ) {
     super(source);
     log.info("New BenefitEvent");
     this.consultant = consultant;
     this.effectiveDate = effectiveDate;
+    this.enrolledMedical = enrolledMedical;
+    this.enrolledDental = enrolledDental;
   }
 
   /**
@@ -50,7 +75,13 @@ public final class BenefitEvent extends EventObject {
     LocalDate effectiveDate
   ) {
     log.info("cancelDental");
-    return new BenefitEvent(source, consultant, effectiveDate);
+    return new BenefitEvent(
+      source,
+      consultant,
+      effectiveDate,
+      Optional.empty(),
+      Optional.of(false)
+    );
   }
 
   /**
@@ -67,7 +98,13 @@ public final class BenefitEvent extends EventObject {
     LocalDate effectiveDate
   ) {
     log.info("cancelMedical");
-    return new BenefitEvent(source, consultant, effectiveDate);
+    return new BenefitEvent(
+      source,
+      consultant,
+      effectiveDate,
+      Optional.of(false),
+      Optional.empty()
+    );
   }
 
   /**
@@ -85,7 +122,13 @@ public final class BenefitEvent extends EventObject {
   ) {
     log.info("enrollDental");
 
-    return new BenefitEvent(source, consultant, effectiveDate);
+    return new BenefitEvent(
+      source,
+      consultant,
+      effectiveDate,
+      Optional.empty(),
+      Optional.of(true)
+    );
   }
 
   /**
@@ -102,7 +145,13 @@ public final class BenefitEvent extends EventObject {
     LocalDate effectiveDate
   ) {
     log.info("enrollMedical");
-    return new BenefitEvent(source, consultant, effectiveDate);
+    return new BenefitEvent(
+      source,
+      consultant,
+      effectiveDate,
+      Optional.of(true),
+      Optional.empty()
+    );
   }
 
   /**
@@ -123,7 +172,7 @@ public final class BenefitEvent extends EventObject {
    */
   public Optional<Boolean> getDentalStatus() {
     log.info("getDentalStatus");
-    return null;
+    return this.enrolledDental;
   }
 
   /**
@@ -134,7 +183,7 @@ public final class BenefitEvent extends EventObject {
    */
   public Optional<Boolean> getMedicalStatus() {
     log.info("getMedicalStatus");
-    return null;
+    return this.enrolledMedical;
   }
 
   /**

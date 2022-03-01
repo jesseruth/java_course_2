@@ -3,7 +3,6 @@ package edu.uw.cp520.scg.beans;
 import edu.uw.cp520.scg.domain.Consultant;
 import edu.uw.cp520.scg.util.PersonalName;
 import java.beans.*;
-import javax.swing.event.EventListenerList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +26,22 @@ public final class StaffConsultant extends Consultant {
    * Vacation hours property name.
    */
   public static final String VACATION_HOURS_PROPERTY_NAME = "vacationHours";
+  /**
+   * Serial versions ID.
+   */
+  private static final long serialVersionUID = -7472617753832885069L;
+  /**
+   * Da logger
+   */
   private static final Logger log = LoggerFactory.getLogger(StaffConsultant.class);
+  /**
+   * Property change support helper.
+   */
+  private final PropertyChangeSupport pcs;
+  /**
+   * Vetoable change support helper.
+   */
+  private final VetoableChangeSupport vcs;
   /**
    * Sick leave hours balance.
    */
@@ -40,19 +54,6 @@ public final class StaffConsultant extends Consultant {
    * Pay rate in cents.
    */
   private int payRate;
-  /**
-   * Property change support helper.
-   */
-  private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-
-  /**
-   * Vetoable change support helper.
-   */
-  private VetoableChangeSupport vcs = new VetoableChangeSupport(this);
-
-  private final EventListenerList payRatelistenerList = new EventListenerList();
-  private final EventListenerList sickLeaveHoursListenerList = new EventListenerList();
-  private final EventListenerList vacationLeaveHoursListenerList = new EventListenerList();
 
   /**
    * Creates a new instance of StaffConsultant
@@ -73,6 +74,8 @@ public final class StaffConsultant extends Consultant {
     this.payRate = rate;
     this.sickLeaveHours = sickLeave;
     this.vacationHours = vacation;
+    pcs = new PropertyChangeSupport(this);
+    vcs = new VetoableChangeSupport(this);
   }
 
   /**
@@ -92,8 +95,8 @@ public final class StaffConsultant extends Consultant {
    * @throws PropertyVetoException if a veto occurs
    */
   public void setPayRate(final int newPayRate) throws PropertyVetoException {
+    vcs.fireVetoableChange(PAY_RATE_PROPERTY_NAME, this.payRate, newPayRate);
     final int oldPayRate = this.payRate;
-    vcs.fireVetoableChange(PAY_RATE_PROPERTY_NAME, oldPayRate, newPayRate);
     this.payRate = newPayRate;
     pcs.firePropertyChange(PAY_RATE_PROPERTY_NAME, oldPayRate, newPayRate);
     log.info("setPayRate {}", newPayRate);
@@ -126,7 +129,7 @@ public final class StaffConsultant extends Consultant {
    */
   public void addPayRateListener(PropertyChangeListener l) {
     log.info("addPayRateListener");
-    payRatelistenerList.add(PropertyChangeListener.class, l);
+    pcs.addPropertyChangeListener(PAY_RATE_PROPERTY_NAME, l);
   }
 
   /**
@@ -136,7 +139,7 @@ public final class StaffConsultant extends Consultant {
    */
   public void removePayRateListener(PropertyChangeListener l) {
     log.info("removePayRateListener");
-    payRatelistenerList.remove(PropertyChangeListener.class, l);
+    pcs.removePropertyChangeListener(PAY_RATE_PROPERTY_NAME, l);
   }
 
   /**
@@ -146,7 +149,7 @@ public final class StaffConsultant extends Consultant {
    */
   public void addVetoableChangeListener(VetoableChangeListener l) {
     log.info("addVetoableChangeListener");
-    vcs.addVetoableChangeListener(l);
+    vcs.addVetoableChangeListener(PAY_RATE_PROPERTY_NAME, l);
   }
 
   /**
@@ -156,7 +159,7 @@ public final class StaffConsultant extends Consultant {
    */
   public void removeVetoableChangeListener(VetoableChangeListener l) {
     log.info("removeVetoableChangeListener");
-    vcs.removeVetoableChangeListener(l);
+    vcs.removeVetoableChangeListener(PAY_RATE_PROPERTY_NAME, l);
   }
 
   /**
@@ -188,7 +191,7 @@ public final class StaffConsultant extends Consultant {
    */
   public void addSickLeaveHoursListener(PropertyChangeListener l) {
     log.info("addSickLeaveHoursListener");
-    sickLeaveHoursListenerList.add(PropertyChangeListener.class, l);
+    pcs.addPropertyChangeListener(SICK_LEAVE_HOURS_PROPERTY_NAME, l);
   }
 
   /**
@@ -198,7 +201,7 @@ public final class StaffConsultant extends Consultant {
    */
   public void removeSickLeaveHoursListener(PropertyChangeListener l) {
     log.info("removeSickLeaveHoursListener");
-    sickLeaveHoursListenerList.remove(PropertyChangeListener.class, l);
+    pcs.removePropertyChangeListener(SICK_LEAVE_HOURS_PROPERTY_NAME, l);
   }
 
   /**
@@ -230,7 +233,7 @@ public final class StaffConsultant extends Consultant {
    */
   public void addVacationHoursListener(PropertyChangeListener l) {
     log.info("addVacationHoursListener");
-    vacationLeaveHoursListenerList.add(PropertyChangeListener.class, l);
+    pcs.addPropertyChangeListener(VACATION_HOURS_PROPERTY_NAME, l);
   }
 
   /**
@@ -240,6 +243,33 @@ public final class StaffConsultant extends Consultant {
    */
   public void removeVacationHoursListener(PropertyChangeListener l) {
     log.info("removeVacationHoursListener");
-    vacationLeaveHoursListenerList.remove(PropertyChangeListener.class, l);
+    pcs.removePropertyChangeListener(VACATION_HOURS_PROPERTY_NAME, l);
+  }
+
+  /**
+   * {@docRoot}
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof StaffConsultant)) return false;
+    if (!super.equals(o)) return false;
+
+    StaffConsultant that = (StaffConsultant) o;
+
+    if (getSickLeaveHours() != that.getSickLeaveHours()) return false;
+    if (getVacationHours() != that.getVacationHours()) return false;
+    return getPayRate() == that.getPayRate();
+  }
+
+  /**
+   * {@docRoot}
+   */
+  @Override
+  public int hashCode() {
+    int result = getSickLeaveHours();
+    result = 31 * result + getVacationHours();
+    result = 31 * result + getPayRate();
+    return result;
   }
 }

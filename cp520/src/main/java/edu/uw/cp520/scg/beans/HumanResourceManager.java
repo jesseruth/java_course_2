@@ -2,6 +2,9 @@ package edu.uw.cp520.scg.beans;
 
 import java.beans.PropertyChangeSupport;
 import java.beans.PropertyVetoException;
+import java.time.LocalDate;
+import java.util.Arrays;
+import javax.swing.event.EventListenerList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,12 +16,12 @@ import org.slf4j.LoggerFactory;
  */
 public final class HumanResourceManager {
 
+  /**
+   * Da Logger
+   */
   private static final Logger log = LoggerFactory.getLogger(HumanResourceManager.class);
 
-  /**
-   * Property change support helper.
-   */
-  private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+  private final EventListenerList listenerList = new EventListenerList();
 
   /**
    * Sets the pay rate for a staff consultant and logs whether the pay rate change was approved
@@ -27,12 +30,13 @@ public final class HumanResourceManager {
    * @param staffConsultant the consultant
    * @param newPayRate      the new pay rate for the consultant
    */
-  public void adjustPayRate(StaffConsultant staffConsultant, int newPayRate) {
+  public void adjustPayRate(final StaffConsultant staffConsultant, final int newPayRate) {
     log.info("adjustPayRate {} {}", staffConsultant, newPayRate);
     try {
       staffConsultant.setPayRate(newPayRate);
+      log.info("Adjustment Approved for {}", staffConsultant.getName());
     } catch (PropertyVetoException e) {
-      e.printStackTrace();
+      log.info("Adjustment denied for {}", staffConsultant.getName());
     }
   }
 
@@ -69,6 +73,7 @@ public final class HumanResourceManager {
    */
   public void acceptResignation(StaffConsultant consultant) {
     log.info("acceptResignation {}", consultant);
+    fireTerminationEvent(new TerminationEvent(this, consultant, true));
   }
 
   /**
@@ -79,6 +84,7 @@ public final class HumanResourceManager {
    */
   public void terminate(StaffConsultant consultant) {
     log.info("terminate {}", consultant);
+    fireTerminationEvent(new TerminationEvent(this, consultant, false));
   }
 
   /**
@@ -88,6 +94,7 @@ public final class HumanResourceManager {
    */
   public void addTerminationListener(TerminationListener l) {
     log.info("addTerminationListener {}", l);
+    listenerList.add(TerminationListener.class, l);
   }
 
   /**
@@ -97,6 +104,7 @@ public final class HumanResourceManager {
    */
   public void removeTerminationListener(TerminationListener l) {
     log.info("removeTerminationListener {}", l);
+    listenerList.remove(TerminationListener.class, l);
   }
 
   /**
@@ -106,6 +114,7 @@ public final class HumanResourceManager {
    */
   public void enrollMedical(StaffConsultant staffConsultant) {
     log.info("enrollMedical {}", staffConsultant);
+    fireBenefitEvent(BenefitEvent.enrollMedical(this, staffConsultant, LocalDate.now()));
   }
 
   /**
@@ -115,6 +124,7 @@ public final class HumanResourceManager {
    */
   public void cancelMedical(StaffConsultant staffConsultant) {
     log.info("cancelMedical {}", staffConsultant);
+    fireBenefitEvent(BenefitEvent.cancelMedical(this, staffConsultant, LocalDate.now()));
   }
 
   /**
@@ -124,6 +134,7 @@ public final class HumanResourceManager {
    */
   public void enrollDental(StaffConsultant staffConsultant) {
     log.info("enrollDental {}", staffConsultant);
+    fireBenefitEvent(BenefitEvent.enrollDental(this, staffConsultant, LocalDate.now()));
   }
 
   /**
@@ -133,15 +144,17 @@ public final class HumanResourceManager {
    */
   public void cancelDental(StaffConsultant staffConsultant) {
     log.info("cancelDental {}", staffConsultant);
+    fireBenefitEvent(BenefitEvent.cancelDental(this, staffConsultant, LocalDate.now()));
   }
 
   /**
    * Adds a benefit listener.
    *
-   * @param bm the listener to add
+   * @param l the listener to add
    */
-  public void addBenefitListener(BenefitListener bm) {
-    log.info("addBenefitListener {}", bm);
+  public void addBenefitListener(BenefitListener l) {
+    log.info("addBenefitListener {}", l);
+    listenerList.add(BenefitListener.class, l);
   }
 
   /**
@@ -151,5 +164,53 @@ public final class HumanResourceManager {
    */
   public void removeBenefitListener(BenefitListener l) {
     log.info("removeBenefitListener {}", l);
+    listenerList.add(BenefitListener.class, l);
+  }
+
+  private void fireBenefitEvent(final BenefitEvent benefitEvent) {
+    final BenefitListener[] listeners = listenerList.getListeners(BenefitListener.class);
+    benefitEvent
+      .getDentalStatus()
+      .ifPresent(dentalStatus -> {
+        Arrays
+          .stream(listeners)
+          .sequential()
+          .forEach(listener -> {
+            if (dentalStatus) {
+              listener.dentalEnrollment(benefitEvent);
+            } else {
+              listener.dentalCancellation(benefitEvent);
+            }
+          });
+      });
+    benefitEvent
+      .getMedicalStatus()
+      .ifPresent(medicalStatus -> {
+        Arrays
+          .stream(listeners)
+          .sequential()
+          .forEach(listener -> {
+            if (medicalStatus) {
+              listener.medicalEnrollment(benefitEvent);
+            } else {
+              listener.medicalCancellation(benefitEvent);
+            }
+          });
+      });
+  }
+
+  private void fireTerminationEvent(final TerminationEvent terminationEvent) {
+    final TerminationListener[] listeners = listenerList.getListeners(
+      TerminationListener.class
+    );
+    Arrays
+      .stream(listeners)
+      .forEach(listener -> {
+        if (terminationEvent.isVoluntary()) {
+          listener.voluntaryTermination(terminationEvent);
+        } else {
+          listener.forcedTermination(terminationEvent);
+        }
+      });
   }
 }

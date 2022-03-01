@@ -14,16 +14,21 @@ import org.slf4j.LoggerFactory;
  */
 public final class BenefitManager implements PropertyChangeListener, BenefitListener {
 
+  /**
+   * da Logger.
+   */
   private static final Logger log = LoggerFactory.getLogger(BenefitManager.class);
-
-  public BenefitManager() {}
 
   /**
    * {@docRoot}
    */
   @Override
   public void medicalEnrollment(BenefitEvent evnt) {
-    log.info("medicalEnrollment");
+    log.info(
+      "medicalEnrollment for {} on {}",
+      evnt.getConsultant().getName(),
+      evnt.getEffectiveDate()
+    );
   }
 
   /**
@@ -31,7 +36,11 @@ public final class BenefitManager implements PropertyChangeListener, BenefitList
    */
   @Override
   public void medicalCancellation(BenefitEvent evnt) {
-    log.info("medicalCancellation");
+    log.info(
+      "medicalCancellation for {} on {}",
+      evnt.getConsultant().getName(),
+      evnt.getEffectiveDate()
+    );
   }
 
   /**
@@ -39,7 +48,11 @@ public final class BenefitManager implements PropertyChangeListener, BenefitList
    */
   @Override
   public void dentalEnrollment(BenefitEvent evnt) {
-    log.info("dentalEnrollment");
+    log.info(
+      "dentalEnrollment for {} on {}",
+      evnt.getConsultant().getName(),
+      evnt.getEffectiveDate()
+    );
   }
 
   /**
@@ -47,7 +60,11 @@ public final class BenefitManager implements PropertyChangeListener, BenefitList
    */
   @Override
   public void dentalCancellation(BenefitEvent evnt) {
-    log.info("dentalCancellation");
+    log.info(
+      "dentalCancellation for {} on {}",
+      evnt.getConsultant().getName(),
+      evnt.getEffectiveDate()
+    );
   }
 
   /**
@@ -58,6 +75,11 @@ public final class BenefitManager implements PropertyChangeListener, BenefitList
    */
   @Override
   public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-    log.info("PropertyChangeEvent");
+    log.info(
+      "PropertyChangeEvent for {}, change {} to {}",
+      propertyChangeEvent.getPropertyName(),
+      propertyChangeEvent.getOldValue(),
+      propertyChangeEvent.getNewValue()
+    );
   }
 }

@@ -228,7 +228,6 @@ public final class Assignment06Test {
 
   /** Test the vetoable property (payRate) */
   @Test
-  @Disabled
   public void testVeto() {
     hrServer.adjustPayRate(staffConsultant, VALID_RAISE);
     assertEquals(VALID_RAISE, staffConsultant.getPayRate());
@@ -246,7 +245,6 @@ public final class Assignment06Test {
 
   /** Test the termination events */
   @Test
-  @Disabled
   public void testTerminations() {
     assertEquals(0, watchDog.voluntaryTerminationCount());
     assertEquals(0, watchDog.forcedTerminationCount());
@@ -268,7 +266,6 @@ public final class Assignment06Test {
 
   /** Test the simple properties (sickLeaveHours and vacationHours) */
   @Test
-  @Disabled
   public void testBenefits() {
     hrServer.adjustSickLeaveHours(staffConsultant, TEST_SICK_LEAVE_HOURS);
     PropertyChangeEvent event = testPropertyListener.lastEvent();
