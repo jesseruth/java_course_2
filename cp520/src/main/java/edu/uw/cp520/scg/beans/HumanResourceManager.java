@@ -4,6 +4,7 @@ import java.beans.PropertyChangeSupport;
 import java.beans.PropertyVetoException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.function.Consumer;
 import javax.swing.event.EventListenerList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,9 @@ public final class HumanResourceManager {
    */
   private static final Logger log = LoggerFactory.getLogger(HumanResourceManager.class);
 
+  /**
+   * List to track event listeners.
+   */
   private final EventListenerList listenerList = new EventListenerList();
 
   /**
@@ -167,6 +171,10 @@ public final class HumanResourceManager {
     listenerList.add(BenefitListener.class, l);
   }
 
+  /**
+   * Private method to contain benefit event logic.
+   * @param benefitEvent An Event.
+   */
   private void fireBenefitEvent(final BenefitEvent benefitEvent) {
     final BenefitListener[] listeners = listenerList.getListeners(BenefitListener.class);
     benefitEvent
@@ -199,18 +207,17 @@ public final class HumanResourceManager {
       });
   }
 
+  /**
+   * Private method to contain termination event.
+   * @param terminationEvent A termination event.
+   */
   private void fireTerminationEvent(final TerminationEvent terminationEvent) {
     final TerminationListener[] listeners = listenerList.getListeners(
       TerminationListener.class
     );
-    Arrays
-      .stream(listeners)
-      .forEach(listener -> {
-        if (terminationEvent.isVoluntary()) {
-          listener.voluntaryTermination(terminationEvent);
-        } else {
-          listener.forcedTermination(terminationEvent);
-        }
-      });
+    final Consumer<TerminationListener> listenerConsumer = terminationEvent.isVoluntary()
+      ? l -> l.voluntaryTermination(terminationEvent)
+      : l -> l.forcedTermination(terminationEvent);
+    Arrays.stream(listeners).forEach(listenerConsumer);
   }
 }
