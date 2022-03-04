@@ -38,7 +38,7 @@ public final class InvoiceLineItem {
    * @param skill      Skill for this line item.
    * @param hours      Hours for this line item.
    */
-  InvoiceLineItem(LocalDate date, Consultant consultant, Skill skill, int hours) {
+  public InvoiceLineItem(LocalDate date, Consultant consultant, Skill skill, int hours) {
     this.date = date;
     this.consultant = consultant;
     this.skill = skill;

@@ -108,7 +108,7 @@ public enum StateCode {
    * @param stateName the name of the state to lookup
    * @return the StateCode corresponding the state name, or null if the state name is not recognized.
    */
-  public StateCode forName(String stateName) {
+  public static StateCode forName(String stateName) {
     return BY_LABEL.get(stateName);
   }
 }
