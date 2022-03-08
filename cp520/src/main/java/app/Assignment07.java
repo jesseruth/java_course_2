@@ -5,15 +5,14 @@ import edu.uw.cp520.scg.domain.Consultant;
 import edu.uw.cp520.scg.domain.Invoice;
 import edu.uw.cp520.scg.persistent.DbServer;
 import edu.uw.ext.util.ListFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.sql.SQLException;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Creates and prints an invoice from the database.
@@ -21,6 +20,7 @@ import java.util.Properties;
  * @author Jesse Ruth
  */
 public final class Assignment07 {
+
   /**
    * Character encoding to use.
    */
@@ -45,7 +45,7 @@ public final class Assignment07 {
   static {
     Properties prop = new Properties();
     try (
-            InputStream in = Invoice.class.getClassLoader().getResourceAsStream(PROP_FILE_NAME)
+      InputStream in = Invoice.class.getClassLoader().getResourceAsStream(PROP_FILE_NAME)
     ) {
       prop.load(in);
     } catch (final IOException e) {
@@ -57,6 +57,7 @@ public final class Assignment07 {
     DB_PASSWORD = prop.getProperty(DB_PASSWORD_PROP, NA);
     dbServer = new DbServer(DB_URL, DB_USERNAME, DB_PASSWORD);
   }
+
   /**
    * Connects to the database and create an invoice to the test month and year and prints it.
    *
@@ -80,20 +81,20 @@ public final class Assignment07 {
     // Use the list util methods
     Console console = System.console();
     PrintWriter consoleWrtr = (console != null)
-            ? console.writer()
-            : new PrintWriter(new OutputStreamWriter(System.out, ENCODING), true);
+      ? console.writer()
+      : new PrintWriter(new OutputStreamWriter(System.out, ENCODING), true);
 
     // Create the Invoices
     // Print them
     consoleWrtr.println();
     consoleWrtr.println(
-            "=================================================================================="
+      "=================================================================================="
     );
     consoleWrtr.println(
-            "=============================== I N V O I C E S =================================="
+      "=============================== I N V O I C E S =================================="
     );
     consoleWrtr.println(
-            "=================================================================================="
+      "=================================================================================="
     );
     consoleWrtr.println();
     ListFactory.printInvoices(invoices, consoleWrtr);
