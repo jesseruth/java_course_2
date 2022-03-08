@@ -3,7 +3,6 @@ package edu.uw.cp520.scg.persistent;
 import static org.junit.jupiter.api.Assertions.*;
 
 import app.DerbyScgDbServer;
-import app.InitDb;
 import edu.uw.cp520.scg.domain.ClientAccount;
 import edu.uw.cp520.scg.domain.Consultant;
 import edu.uw.cp520.scg.domain.TimeCard;
