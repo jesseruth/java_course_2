@@ -15,60 +15,67 @@ import org.slf4j.LoggerFactory;
  * @author Jesse Ruth
  */
 public final class CompensationManager
-  implements PropertyChangeListener, VetoableChangeListener {
+    implements PropertyChangeListener, VetoableChangeListener {
 
-  /**
-   * Da logger.
-   */
-  private static final Logger log = LoggerFactory.getLogger(CompensationManager.class);
+    /**
+     * Da logger.
+     */
+    private static final Logger log = LoggerFactory.getLogger(CompensationManager.class);
 
-  /**
-   * Processes to final pay rate change.
-   *
-   * @param propertyChangeEvent a change event for the payRate property
-   */
-  @Override
-  public void propertyChange(final PropertyChangeEvent propertyChangeEvent) {
-    log.info("propertyChange {}", propertyChangeEvent);
-    if (
-      StaffConsultant.PAY_RATE_PROPERTY_NAME.equals(propertyChangeEvent.getPropertyName())
-    ) {
-      log.info(
-        "Pay Rate Changed from {} to {} for {}",
-        propertyChangeEvent.getOldValue(),
-        propertyChangeEvent.getNewValue(),
-        ((StaffConsultant) propertyChangeEvent.getSource()).getName()
-      );
+    /**
+     * Processes to final pay rate change.
+     *
+     * @param propertyChangeEvent a change event for the payRate property
+     */
+    @Override
+    public void propertyChange(final PropertyChangeEvent propertyChangeEvent) {
+        log.info("propertyChange {}", propertyChangeEvent);
+        if (
+            StaffConsultant.PAY_RATE_PROPERTY_NAME.equals(
+                propertyChangeEvent.getPropertyName()
+            )
+        ) {
+            log.info(
+                "Pay Rate Changed from {} to {} for {}",
+                propertyChangeEvent.getOldValue(),
+                propertyChangeEvent.getNewValue(),
+                ((StaffConsultant) propertyChangeEvent.getSource()).getName()
+            );
+        }
     }
-  }
 
-  /**
-   * Rejects any raise over 5%.
-   *
-   * @param propertyChangeEvent a vetoable change event for the payRate property
-   * @throws PropertyVetoException if the change is vetoed
-   */
-  @Override
-  public void vetoableChange(final PropertyChangeEvent propertyChangeEvent)
-    throws PropertyVetoException {
-    log.info("vetoableChange {}", propertyChangeEvent);
-    if (
-      StaffConsultant.PAY_RATE_PROPERTY_NAME.equals(propertyChangeEvent.getPropertyName())
-    ) {
-      final int oldValue = (Integer) propertyChangeEvent.getOldValue();
-      final int newValue = (Integer) propertyChangeEvent.getNewValue();
-      final int MAX_RATE = 105;
-      final int PERCENT = 100;
-      if (newValue * PERCENT > oldValue * MAX_RATE) {
-        throw new PropertyVetoException("Amount exceed allowed %", propertyChangeEvent);
-      }
+    /**
+     * Rejects any raise over 5%.
+     *
+     * @param propertyChangeEvent a vetoable change event for the payRate property
+     * @throws PropertyVetoException if the change is vetoed
+     */
+    @Override
+    public void vetoableChange(final PropertyChangeEvent propertyChangeEvent)
+        throws PropertyVetoException {
+        log.info("vetoableChange {}", propertyChangeEvent);
+        if (
+            StaffConsultant.PAY_RATE_PROPERTY_NAME.equals(
+                propertyChangeEvent.getPropertyName()
+            )
+        ) {
+            final int oldValue = (Integer) propertyChangeEvent.getOldValue();
+            final int newValue = (Integer) propertyChangeEvent.getNewValue();
+            final int MAX_RATE = 105;
+            final int PERCENT = 100;
+            if (newValue * PERCENT > oldValue * MAX_RATE) {
+                throw new PropertyVetoException(
+                    "Amount exceed allowed %",
+                    propertyChangeEvent
+                );
+            }
 
-      log.info(
-        "Pay Rate Changed from {} to {} for {}",
-        propertyChangeEvent.getOldValue(),
-        propertyChangeEvent.getNewValue(),
-        ((StaffConsultant) propertyChangeEvent.getSource()).getName()
-      );
+            log.info(
+                "Pay Rate Changed from {} to {} for {}",
+                propertyChangeEvent.getOldValue(),
+                propertyChangeEvent.getNewValue(),
+                ((StaffConsultant) propertyChangeEvent.getSource()).getName()
+            );
+        }
     }
-  }
 }

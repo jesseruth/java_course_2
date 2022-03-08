@@ -16,37 +16,43 @@ import org.junit.jupiter.api.Test;
  */
 public final class TimeCardConsultantComparatorRussTest {
 
-  /** String literal for "Coder". */
-  private static final String CODER = "Coder";
-  /** String literal for "Jane". */
-  private static final String JANE = "Jane";
-  /** String literal for "John". */
-  private static final String JOHN = "John";
-  /** String literal for "Q.". */
-  private static final String Q_DOT = "Q.";
+    /** String literal for "Coder". */
+    private static final String CODER = "Coder";
+    /** String literal for "Jane". */
+    private static final String JANE = "Jane";
+    /** String literal for "John". */
+    private static final String JOHN = "John";
+    /** String literal for "Q.". */
+    private static final String Q_DOT = "Q.";
 
-  /**
-   * Tests the compare method.
-   */
-  @Test
-  public void testCompare() {
-    final TimeCardConsultantComparator timeCardConsultantComparator = new TimeCardConsultantComparator();
-    final LocalDate date = LocalDate.now();
+    /**
+     * Tests the compare method.
+     */
+    @Test
+    public void testCompare() {
+        final TimeCardConsultantComparator timeCardConsultantComparator = new TimeCardConsultantComparator();
+        final LocalDate date = LocalDate.now();
 
-    final TimeCard firstTimeCard = new TimeCard(
-      new Consultant(new PersonalName(CODER, JANE, Q_DOT)),
-      date
-    );
-    TimeCard secondTimeCard = new TimeCard(
-      new Consultant(new PersonalName(CODER, JANE, Q_DOT)),
-      date
-    );
+        final TimeCard firstTimeCard = new TimeCard(
+            new Consultant(new PersonalName(CODER, JANE, Q_DOT)),
+            date
+        );
+        TimeCard secondTimeCard = new TimeCard(
+            new Consultant(new PersonalName(CODER, JANE, Q_DOT)),
+            date
+        );
 
-    assertTrue(timeCardConsultantComparator.compare(firstTimeCard, secondTimeCard) == 0);
+        assertTrue(
+            timeCardConsultantComparator.compare(firstTimeCard, secondTimeCard) == 0
+        );
 
-    secondTimeCard =
-      new TimeCard(new Consultant(new PersonalName(CODER, JOHN, Q_DOT)), date);
-    assertTrue(timeCardConsultantComparator.compare(firstTimeCard, secondTimeCard) < 0);
-    assertTrue(timeCardConsultantComparator.compare(secondTimeCard, firstTimeCard) > 0);
-  }
+        secondTimeCard =
+            new TimeCard(new Consultant(new PersonalName(CODER, JOHN, Q_DOT)), date);
+        assertTrue(
+            timeCardConsultantComparator.compare(firstTimeCard, secondTimeCard) < 0
+        );
+        assertTrue(
+            timeCardConsultantComparator.compare(secondTimeCard, firstTimeCard) > 0
+        );
+    }
 }

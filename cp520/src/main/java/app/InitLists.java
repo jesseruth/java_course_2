@@ -16,34 +16,34 @@ import org.slf4j.LoggerFactory;
  */
 public class InitLists {
 
-  public static final String TIME_CARDS_SER = "TimeCardList.ser";
-  public static final String CLIENTS_SER = "ClientList.ser";
-  public static final String CONSULTANTS_SER = "ConsultantList.ser";
-  /**
-   * This class' logger.
-   */
-  private static final Logger log = LoggerFactory.getLogger(InitLists.class);
+    public static final String TIME_CARDS_SER = "TimeCardList.ser";
+    public static final String CLIENTS_SER = "ClientList.ser";
+    public static final String CONSULTANTS_SER = "ConsultantList.ser";
+    /**
+     * This class' logger.
+     */
+    private static final Logger log = LoggerFactory.getLogger(InitLists.class);
 
-  /**
-   * Prevent instantiation.
-   */
-  private InitLists() {}
+    /**
+     * Prevent instantiation.
+     */
+    private InitLists() {}
 
-  /**
-   * The application method.
-   *
-   * @param args Command line arguments.
-   * @throws Exception if raised
-   */
-  public static void main(final String[] args) throws Exception {
-    // Create lists to be populated by factory
-    final List<ClientAccount> accounts = new ArrayList<>();
-    final List<Consultant> consultants = new ArrayList<>();
-    final List<TimeCard> timeCards = new ArrayList<>();
-    ListFactory.populateLists(accounts, consultants, timeCards);
-    log.info("Populating Lists");
-    Util.writeObject(TIME_CARDS_SER, timeCards);
-    Util.writeObject(CONSULTANTS_SER, consultants);
-    Util.writeObject(CLIENTS_SER, accounts);
-  }
+    /**
+     * The application method.
+     *
+     * @param args Command line arguments.
+     * @throws Exception if raised
+     */
+    public static void main(final String[] args) throws Exception {
+        // Create lists to be populated by factory
+        final List<ClientAccount> accounts = new ArrayList<>();
+        final List<Consultant> consultants = new ArrayList<>();
+        final List<TimeCard> timeCards = new ArrayList<>();
+        ListFactory.populateLists(accounts, consultants, timeCards);
+        log.info("Populating Lists");
+        Util.writeObject(TIME_CARDS_SER, timeCards);
+        Util.writeObject(CONSULTANTS_SER, consultants);
+        Util.writeObject(CLIENTS_SER, accounts);
+    }
 }

@@ -8,31 +8,31 @@ import java.util.EventListener;
  * @author Jesse Ruth
  */
 public interface BenefitListener extends EventListener {
-  /**
-   * Invoked when a consultant enrolls in medical.
-   *
-   * @param event a Benefit event
-   */
-  void medicalEnrollment(BenefitEvent event);
+    /**
+     * Invoked when a consultant enrolls in medical.
+     *
+     * @param event a Benefit event
+     */
+    void medicalEnrollment(BenefitEvent event);
 
-  /**
-   * Invoked when a consultant is cancels medical.
-   *
-   * @param event a Benefit event
-   */
-  void medicalCancellation(BenefitEvent event);
+    /**
+     * Invoked when a consultant is cancels medical.
+     *
+     * @param event a Benefit event
+     */
+    void medicalCancellation(BenefitEvent event);
 
-  /**
-   * Invoked when a consultant enrolls in dental.
-   *
-   * @param event a Benefit event
-   */
-  void dentalEnrollment(BenefitEvent event);
+    /**
+     * Invoked when a consultant enrolls in dental.
+     *
+     * @param event a Benefit event
+     */
+    void dentalEnrollment(BenefitEvent event);
 
-  /**
-   * Invoked when a consultant cancels dental.
-   *
-   * @param event a Benefit event
-   */
-  void dentalCancellation(BenefitEvent event);
+    /**
+     * Invoked when a consultant cancels dental.
+     *
+     * @param event a Benefit event
+     */
+    void dentalCancellation(BenefitEvent event);
 }

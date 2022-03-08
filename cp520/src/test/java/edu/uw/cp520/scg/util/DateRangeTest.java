@@ -8,18 +8,18 @@ import org.junit.jupiter.api.Test;
 
 class DateRangeTest {
 
-  @BeforeEach
-  void setUp() {}
+    @BeforeEach
+    void setUp() {}
 
-  @AfterEach
-  void tearDown() {}
+    @AfterEach
+    void tearDown() {}
 
-  @Test
-  void isInRange() {}
+    @Test
+    void isInRange() {}
 
-  @Test
-  void getEndDate() {}
+    @Test
+    void getEndDate() {}
 
-  @Test
-  void getStartDate() {}
+    @Test
+    void getStartDate() {}
 }
