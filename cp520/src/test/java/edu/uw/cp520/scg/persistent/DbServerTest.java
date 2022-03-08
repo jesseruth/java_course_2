@@ -23,6 +23,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+/**
+ * I tried to set this up but was not able to complete it!
+ */
 @Disabled
 class DbServerTest {
 
