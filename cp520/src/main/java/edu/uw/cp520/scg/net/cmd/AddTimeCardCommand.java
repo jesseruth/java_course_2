@@ -11,15 +11,20 @@ import org.slf4j.LoggerFactory;
  * @author Jesse Ruth
  */
 public final class AddTimeCardCommand extends AbstractCommand<TimeCard> {
-
+    /**
+     * Serial Version id.
+     **/
     private static final long serialVersionUID = -5416948315790694166L;
+
     /**
      * Da Logger
      */
     private static final Logger log = LoggerFactory.getLogger(AddTimeCardCommand.class);
+
     /**
      * Construct an AddTimeCardCommand with a target.
-     * @param target  the target of this Command.
+     *
+     * @param target the target of this Command.
      */
     public AddTimeCardCommand(TimeCard target) {
         super(target);

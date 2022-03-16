@@ -11,13 +11,21 @@ import java.io.Serializable;
  * @author Jesse Ruth
  */
 public abstract class AbstractCommand<T> implements Command<T>, Serializable {
+    /**
+     * Command Target
+     **/
     private T target;
+
+    /**
+     * Command Processor
+     **/
     private CommandProcessor receiver;
 
     /**
      * Construct an AbstractCommand without a target; called from subclasses.
      */
-    public AbstractCommand() { }
+    public AbstractCommand() {
+    }
 
     /**
      * Construct an AbstractCommand with a target; called from subclasses.
@@ -33,6 +41,7 @@ public abstract class AbstractCommand<T> implements Command<T>, Serializable {
      *
      * @return the receiver for this Command.
      */
+    @Override
     public final CommandProcessor getReceiver() {
         return this.receiver;
     }
@@ -42,6 +51,7 @@ public abstract class AbstractCommand<T> implements Command<T>, Serializable {
      *
      * @param receiver CommandProcessor for this command.
      */
+    @Override
     public final void setReceiver(CommandProcessor receiver) {
         this.receiver = receiver;
     }
@@ -51,6 +61,7 @@ public abstract class AbstractCommand<T> implements Command<T>, Serializable {
      *
      * @return the target.
      */
+    @Override
     public final T getTarget() {
         return this.target;
     }
@@ -62,6 +73,6 @@ public abstract class AbstractCommand<T> implements Command<T>, Serializable {
      */
     @Override
     public String toString() {
-        return this.getClass().getName();
+        return this.getClass().getName() + ", target " + target;
     }
 }

@@ -6,23 +6,27 @@ import java.io.Serializable;
 
 /**
  * The interface of all Command objects, implements the command role in the Command design pattern.
+ *
  * @param <T>
  */
 public interface Command<T> extends Serializable {
     /**
      * Gets the CommandProcessor receiver for this Command.
+     *
      * @return the receiver for this Command.
      */
     CommandProcessor getReceiver();
 
     /**
      * Set the CommandProcessor that will execute this Command.
+     *
      * @param receiver Set the CommandProcessor that will execute this Command.
      */
     void setReceiver(CommandProcessor receiver);
 
     /**
      * Return the target of this Command.
+     *
      * @return the target.
      */
     T getTarget();

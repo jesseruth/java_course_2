@@ -10,9 +10,12 @@ import org.slf4j.LoggerFactory;
  *
  * @author Jesse Ruth
  */
-public final class AddConsultantCommand extends AbstractCommand<Consultant>  {
-
+public final class AddConsultantCommand extends AbstractCommand<Consultant> {
+    /**
+     * Serial Version id.
+     **/
     private static final long serialVersionUID = 5932744383365838307L;
+
     /**
      * Da Logger
      */
@@ -20,11 +23,13 @@ public final class AddConsultantCommand extends AbstractCommand<Consultant>  {
 
     /**
      * Construct an AddConsultantCommand with a target.
-     * @param target  Construct an AddConsultantCommand with a target.
+     *
+     * @param target Construct an AddConsultantCommand with a target.
      */
     public AddConsultantCommand(Consultant target) {
-
+        super(target);
     }
+
     /**
      * Execute this Command by calling receiver.execute(this).
      */

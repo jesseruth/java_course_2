@@ -12,18 +12,22 @@ import org.slf4j.LoggerFactory;
  */
 public final class ShutdownCommand extends AbstractCommand<Void> {
 
-
+    /**
+     * Serial Version id.
+     **/
     private static final long serialVersionUID = -512576961435482346L;
-
 
     /**
      * Da Logger
      */
     private static final Logger log = LoggerFactory.getLogger(ShutdownCommand.class);
+
     /**
      * Construct an ShutdownCommand.
      */
-    public ShutdownCommand() { }
+    public ShutdownCommand() {
+        super();
+    }
 
     /**
      * {@docRoot}

@@ -10,18 +10,22 @@ import org.slf4j.LoggerFactory;
  * @author Jesse Ruth
  */
 public final class DisconnectCommand extends AbstractCommand<Void> {
-
-
+    /**
+     * Serial Version id.
+     **/
     private static final long serialVersionUID = -406126408048492472L;
 
     /**
      * Da Logger
      */
     private static final Logger log = LoggerFactory.getLogger(DisconnectCommand.class);
+
     /**
      * Construct an DisconnectCommand.
      */
-    public DisconnectCommand() { }
+    public DisconnectCommand() {
+        super();
+    }
 
     /**
      * Execute this Command by calling receiver.execute(this).

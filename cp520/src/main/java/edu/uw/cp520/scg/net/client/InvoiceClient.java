@@ -1,7 +1,6 @@
 package edu.uw.cp520.scg.net.client;
 
 
-
 import edu.uw.cp520.scg.domain.ClientAccount;
 import edu.uw.cp520.scg.domain.Consultant;
 import edu.uw.cp520.scg.domain.TimeCard;
@@ -29,11 +28,30 @@ public final class InvoiceClient {
      * Da Logger
      */
     private static final Logger log = LoggerFactory.getLogger(InvoiceClient.class);
-    /** The socket. */
-    private Socket socket;
+
+    /**
+     * Server host
+     **/
     private final String host;
-    private final  List<TimeCard> timeCardList;
+    /**
+     * List of timecards
+     **/
+    private final List<TimeCard> timeCardList;
+    /**
+     * server port
+     **/
     private final int port;
+
+    /**
+     * Invoice year
+     */
+    private final int INVOICE_YEAR = 2017;
+
+    /**
+     * Invoice month
+     */
+    private final Month INVOICE_MONTH = Month.MARCH;
+
     /**
      * Construct an InvoiceClient with a host and port for the server.
      *
@@ -53,22 +71,19 @@ public final class InvoiceClient {
      */
     public void run() {
         log.info("Running Invoice Client");
-        try {
-            socket = new Socket(host, port);
-            OutputStream os = socket.getOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(os);
+        try (Socket server = new Socket(host, port)) {
+            server.shutdownInput();
+            ObjectOutputStream oos = new ObjectOutputStream(server.getOutputStream());
 
             this.sendTimeCards(oos);
             this.sendConsultants(oos);
+            oos.writeObject("Test don't run!!!");
             this.sendClients(oos);
-            this.createInvoices(oos, Month.MARCH, 2017);
-            this.sendDisconnect(oos, socket);
+            this.createInvoices(oos, INVOICE_MONTH, INVOICE_YEAR);
+            this.sendDisconnect(oos, server);
 
-//            sendShutdown(host, port);
-              os.close();
-//            oos.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Cannot connect to server", e);
         }
 
     }
@@ -80,10 +95,13 @@ public final class InvoiceClient {
      */
     public void sendClients(ObjectOutputStream out) {
         log.info("sendClients");
-        ClientAccount account = new ClientAccount("Account", new PersonalName("jim", "Bib"), new Address("125 main", "seattle", StateCode.WA, "22323"));
-        AddClientCommand addClientCommand = new AddClientCommand(account);
+        ClientAccount account1 = new ClientAccount("Account", new PersonalName("jim", "Bib"), new Address("125 main", "seattle", StateCode.WA, "22323"));
+        ClientAccount account2 = new ClientAccount("Account2", new PersonalName("joe", "Bib"), new Address("125 main", "seattle", StateCode.WA, "22323"));
         try {
-            out.writeObject(addClientCommand);
+            out.writeObject(new AddClientCommand(account1));
+            out.flush();
+            out.writeObject(new AddClientCommand(account2));
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -96,10 +114,13 @@ public final class InvoiceClient {
      */
     public void sendConsultants(ObjectOutputStream out) {
         log.info("sendConsultants");
-        Consultant consultant = new Consultant(new PersonalName("jim", "bob"));
-        AddConsultantCommand addConsultantCommand = new AddConsultantCommand(consultant);
+        Consultant consultant1 = new Consultant(new PersonalName("jim", "bob"));
+        Consultant consultant2 = new Consultant(new PersonalName("jane", "bob"));
         try {
-            out.writeObject(addConsultantCommand);
+            out.writeObject(new AddConsultantCommand(consultant1));
+            out.flush();
+            out.writeObject(new AddConsultantCommand(consultant2));
+            out.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -113,18 +134,17 @@ public final class InvoiceClient {
     public void sendTimeCards(ObjectOutputStream out) {
         log.info("sendTimeCards");
         int count = 1;
-        for (TimeCard timeCard: timeCardList) {
+        for (TimeCard timeCard : timeCardList) {
             log.info("Add timecard {} {}", count, timeCard.toString());
             AddTimeCardCommand addTimeCardCommand = new AddTimeCardCommand(timeCard);
             try {
                 out.writeObject(addTimeCardCommand);
+                out.flush();
                 count++;
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
-
     }
 
     /**
@@ -157,6 +177,7 @@ public final class InvoiceClient {
         CreateInvoicesCommand createInvoicesCommand = new CreateInvoicesCommand(LocalDate.of(year, month, 1));
         try {
             out.writeObject(createInvoicesCommand);
+            out.flush();
         } catch (IOException e) {
             log.error("createInvoices Command failed", e);
             e.printStackTrace();
@@ -172,7 +193,20 @@ public final class InvoiceClient {
      */
     public static void sendShutdown(String host, int port) {
         log.info("sendShutdown");
-
+        try (Socket server = new Socket(host, port)) {
+            ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+            server.shutdownInput();
+            final ShutdownCommand shutdownCommand = new ShutdownCommand();
+            try {
+                out.writeObject(shutdownCommand);
+                server.close();
+            } catch (IOException e) {
+                log.error("sendShutdown Command failed", e);
+                e.printStackTrace();
+            }
+        } catch (final IOException e) {
+            log.error("Sending shutdown", e);
+        }
     }
 
 }

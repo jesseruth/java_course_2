@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import java.io.*;
 import java.net.Socket;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,12 +33,18 @@ public final class CommandProcessor {
      * Da Logger
      */
     private static final Logger log = LoggerFactory.getLogger(CommandProcessor.class);
+    /** The Socket Connection **/
     private final Socket connection;
+    /** The client list **/
     private final List<ClientAccount> clientList;
+    /** The consultant list **/
     private final List<Consultant> consultantList;
+    /** The timecard list **/
     private static final List<TimeCard> timeCardList = new ArrayList<>();
+    /** The server that runs this command processor **/
     private final InvoiceServer server;
-    private String outPutDirectoryName;
+    /** Directory to output files for this server **/
+    private String outPutDirectoryName = ".";
 
     /**
      * Construct a CommandProcessor to run in a networked environment.
@@ -65,7 +72,6 @@ public final class CommandProcessor {
      */
     public void setOutPutDirectoryName(String outPutDirectoryName) {
         log.debug("Update setOutPutDirectoryName {}", outPutDirectoryName);
-
         this.outPutDirectoryName = outPutDirectoryName;
     }
 
@@ -112,6 +118,8 @@ public final class CommandProcessor {
      */
     public void execute(CreateInvoicesCommand command) {
         LocalDate invoiceDate = command.getTarget();
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMMyyyy");
+        final String monthString = dateTimeFormatter.format(invoiceDate);
         log.info("Execute CreateInvoicesCommand");
 
         log.info("Running Assignment 07");
@@ -120,12 +128,34 @@ public final class CommandProcessor {
 
         log.info("Looping through clients to make invoices");
 
+
+
         for (ClientAccount clientAccount : clientList) {
             log.info("Client: {}", clientAccount.getName());
 
             Invoice invoice = new Invoice(clientAccount, invoiceDate.getMonth(), invoiceDate.getYear());
             invoices.add(invoice);
+            for (final TimeCard timeCard: timeCardList) {
+                invoice.extractLineItems(timeCard);
+            }
             log.info("Added invoice: {}", invoice);
+            if (invoice.getTotalHours() > 0) {
+                final File serverDir = new File(outPutDirectoryName);
+                if (!serverDir.exists()) {
+                    if (!serverDir.mkdirs()) {
+                        log.error("Unable to create directory");
+                        return;
+                    }
+                }
+                final String fileName = String.format("%s%sInvoice.txt", clientAccount.getName().replaceAll(" ", ""), monthString);
+                final File outputFile = new File(outPutDirectoryName, fileName);
+                try (PrintStream printStream = new PrintStream(new FileOutputStream(outputFile))){
+                        printStream.println(invoice.toReportString());
+                } catch (FileNotFoundException e) {
+                   log.error("File not found", e);
+                }
+            }
+
         }
         // Use the list util methods
         Console console = System.console();
@@ -175,7 +205,14 @@ public final class CommandProcessor {
      * @param command the input ShutdownCommand.
      */
     public void execute(ShutdownCommand command) {
-        log.info("Execute ShutdownCommand");
+        try {
+            command.getReceiver().connection.close();
+        } catch (IOException e) {
+            log.error("Disconnect Command Failed", e);
+            e.printStackTrace();
+        } finally {
+            server.shutdown();
+        }
     }
 
 }

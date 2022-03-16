@@ -12,13 +12,16 @@ import java.time.LocalDate;
  * @author Jesse Ruth
  */
 public final class CreateInvoicesCommand extends AbstractCommand<LocalDate> {
-
-
+    /**
+     * Serial Version id.
+     **/
     private static final long serialVersionUID = 8054828831211198705L;
+
     /**
      * Da Logger
      */
     private static final Logger log = LoggerFactory.getLogger(CreateInvoicesCommand.class);
+
     /**
      * Construct a CreateInvoicesCommand with a target month, which should be obtained by getting the desired month constant from LocalDate.
      *
