@@ -84,6 +84,8 @@ public final class InvoiceClient {
 
         } catch (IOException e) {
             log.error("Cannot connect to server", e);
+        } finally {
+            sendShutdown(host, port);
         }
 
     }
