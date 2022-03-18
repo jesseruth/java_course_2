@@ -6,15 +6,14 @@ import edu.uw.cp520.scg.domain.Invoice;
 import edu.uw.cp520.scg.domain.TimeCard;
 import edu.uw.cp520.scg.net.cmd.*;
 import edu.uw.ext.util.ListFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The command processor for the invoice server. Implements the receiver role in the Command design pattern, provides
@@ -54,10 +53,12 @@ public final class CommandProcessor {
      * @param consultantList the ClientList to add Clients to.
      * @param server         the server that created this command processor
      */
-    public CommandProcessor(final Socket connection,
-                            final List<ClientAccount> clientList,
-                            final List<Consultant> consultantList,
-                            final InvoiceServer server) {
+    public CommandProcessor(
+        final Socket connection,
+        final List<ClientAccount> clientList,
+        final List<Consultant> consultantList,
+        final InvoiceServer server
+    ) {
         log.info("Create new command processor");
         this.connection = connection;
         this.clientList = clientList;
@@ -118,7 +119,9 @@ public final class CommandProcessor {
      */
     public void execute(CreateInvoicesCommand command) {
         LocalDate invoiceDate = command.getTarget();
-        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MMMMyyyy");
+        final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
+            "MMMMyyyy"
+        );
         final String monthString = dateTimeFormatter.format(invoiceDate);
         log.info("Execute CreateInvoicesCommand");
 
@@ -128,14 +131,16 @@ public final class CommandProcessor {
 
         log.info("Looping through clients to make invoices");
 
-
-
         for (ClientAccount clientAccount : clientList) {
             log.info("Client: {}", clientAccount.getName());
 
-            Invoice invoice = new Invoice(clientAccount, invoiceDate.getMonth(), invoiceDate.getYear());
+            Invoice invoice = new Invoice(
+                clientAccount,
+                invoiceDate.getMonth(),
+                invoiceDate.getYear()
+            );
             invoices.add(invoice);
-            for (final TimeCard timeCard: timeCardList) {
+            for (final TimeCard timeCard : timeCardList) {
                 invoice.extractLineItems(timeCard);
             }
             log.info("Added invoice: {}", invoice);
@@ -147,21 +152,29 @@ public final class CommandProcessor {
                         return;
                     }
                 }
-                final String fileName = String.format("%s%sInvoice.txt", clientAccount.getName().replaceAll(" ", ""), monthString);
+                final String fileName = String.format(
+                    "%s%sInvoice.txt",
+                    clientAccount.getName().replaceAll(" ", ""),
+                    monthString
+                );
                 final File outputFile = new File(outPutDirectoryName, fileName);
-                try (PrintStream printStream = new PrintStream(new FileOutputStream(outputFile))){
-                        printStream.println(invoice.toReportString());
+                try (
+                    PrintStream printStream = new PrintStream(
+                        new FileOutputStream(outputFile)
+                    )
+                ) {
+                    printStream.println(invoice.toReportString());
                 } catch (FileNotFoundException e) {
-                   log.error("File not found", e);
+                    log.error("File not found", e);
                 }
             }
-
         }
         // Use the list util methods
         Console console = System.console();
         PrintWriter consoleWrtr = null;
         try {
-            consoleWrtr = (console != null)
+            consoleWrtr =
+                (console != null)
                     ? console.writer()
                     : new PrintWriter(new OutputStreamWriter(System.out, ENCODING), true);
         } catch (UnsupportedEncodingException e) {
@@ -172,13 +185,13 @@ public final class CommandProcessor {
         // Print them
         consoleWrtr.println();
         consoleWrtr.println(
-                "=================================================================================="
+            "=================================================================================="
         );
         consoleWrtr.println(
-                "=============================== I N V O I C E S =================================="
+            "=============================== I N V O I C E S =================================="
         );
         consoleWrtr.println(
-                "=================================================================================="
+            "=================================================================================="
         );
         consoleWrtr.println();
         ListFactory.printInvoices(invoices, consoleWrtr);
@@ -214,5 +227,4 @@ public final class CommandProcessor {
             server.shutdown();
         }
     }
-
 }

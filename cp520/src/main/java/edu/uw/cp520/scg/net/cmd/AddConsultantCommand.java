@@ -4,13 +4,13 @@ import edu.uw.cp520.scg.domain.Consultant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The command to add a Consultant to a list maintained by the server, target type is Consultant.
  *
  * @author Jesse Ruth
  */
 public final class AddConsultantCommand extends AbstractCommand<Consultant> {
+
     /**
      * Serial Version id.
      **/

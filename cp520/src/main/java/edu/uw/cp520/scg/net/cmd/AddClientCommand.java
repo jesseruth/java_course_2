@@ -4,13 +4,13 @@ import edu.uw.cp520.scg.domain.ClientAccount;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * The command to add a ClientAccount to a list maintained by the server, target type is ClientAccount.
  *
  * @author Jesse Ruth
  */
 public final class AddClientCommand extends AbstractCommand<ClientAccount> {
+
     /**
      * Serial Version id.
      **/

@@ -4,13 +4,13 @@ import edu.uw.cp520.scg.domain.TimeCard;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 /**
  * Command that adds a TimeCard to the server's list of TimeCards, target type is TimeCards.
  *
  * @author Jesse Ruth
  */
 public final class AddTimeCardCommand extends AbstractCommand<TimeCard> {
+
     /**
      * Serial Version id.
      **/
@@ -37,6 +37,5 @@ public final class AddTimeCardCommand extends AbstractCommand<TimeCard> {
     public void execute() {
         log.info("execute AddTimeCardCommand");
         this.getReceiver().execute(this);
-
     }
 }

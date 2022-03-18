@@ -1,6 +1,5 @@
 package edu.uw.cp520.scg.net.client;
 
-
 import edu.uw.cp520.scg.domain.ClientAccount;
 import edu.uw.cp520.scg.domain.Consultant;
 import edu.uw.cp520.scg.domain.TimeCard;
@@ -8,14 +7,13 @@ import edu.uw.cp520.scg.net.cmd.*;
 import edu.uw.cp520.scg.util.Address;
 import edu.uw.cp520.scg.util.PersonalName;
 import edu.uw.cp520.scg.util.StateCode;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.net.Socket;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The client of the InvoiceServer. Connects to the server, sends commands to add clients, consultants and time cards
@@ -24,6 +22,7 @@ import java.util.List;
  * @author Jesse Ruth
  */
 public final class InvoiceClient {
+
     /**
      * Da Logger
      */
@@ -81,13 +80,11 @@ public final class InvoiceClient {
             this.sendClients(oos);
             this.createInvoices(oos, INVOICE_MONTH, INVOICE_YEAR);
             this.sendDisconnect(oos, server);
-
         } catch (IOException e) {
             log.error("Cannot connect to server", e);
         } finally {
             sendShutdown(host, port);
         }
-
     }
 
     /**
@@ -97,8 +94,16 @@ public final class InvoiceClient {
      */
     public void sendClients(ObjectOutputStream out) {
         log.info("sendClients");
-        ClientAccount account1 = new ClientAccount("Account", new PersonalName("jim", "Bib"), new Address("125 main", "seattle", StateCode.WA, "22323"));
-        ClientAccount account2 = new ClientAccount("Account2", new PersonalName("joe", "Bib"), new Address("125 main", "seattle", StateCode.WA, "22323"));
+        ClientAccount account1 = new ClientAccount(
+            "Account",
+            new PersonalName("jim", "Bib"),
+            new Address("125 main", "seattle", StateCode.WA, "22323")
+        );
+        ClientAccount account2 = new ClientAccount(
+            "Account2",
+            new PersonalName("joe", "Bib"),
+            new Address("125 main", "seattle", StateCode.WA, "22323")
+        );
         try {
             out.writeObject(new AddClientCommand(account1));
             out.flush();
@@ -176,7 +181,9 @@ public final class InvoiceClient {
      */
     public void createInvoices(ObjectOutputStream out, Month month, int year) {
         log.info("createInvoices");
-        CreateInvoicesCommand createInvoicesCommand = new CreateInvoicesCommand(LocalDate.of(year, month, 1));
+        CreateInvoicesCommand createInvoicesCommand = new CreateInvoicesCommand(
+            LocalDate.of(year, month, 1)
+        );
         try {
             out.writeObject(createInvoicesCommand);
             out.flush();
@@ -184,7 +191,6 @@ public final class InvoiceClient {
             log.error("createInvoices Command failed", e);
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -210,5 +216,4 @@ public final class InvoiceClient {
             log.error("Sending shutdown", e);
         }
     }
-
 }

@@ -1,11 +1,8 @@
 package app;
 
-
 import edu.uw.cp520.scg.net.client.InvoiceClient;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * The client application for Assignment08, create an InvoiceClient instance and use it to send the various commands to the server, and disconnects, and then on a separate connection sends the shutdown command.
@@ -13,6 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author Jesse Ruth
  */
 public class Assignment08 {
+
     /**
      * Da Logger
      */
@@ -31,7 +29,11 @@ public class Assignment08 {
      */
     public static void main(String[] args) throws Exception {
         log.info("Running Assignment08 Client");
-        InvoiceClient invoiceClient = new InvoiceClient(LOCAL_HOST, Assignment08Server.DEFAULT_PORT, Util.TIME_CARD_LIST);
+        InvoiceClient invoiceClient = new InvoiceClient(
+            LOCAL_HOST,
+            Assignment08Server.DEFAULT_PORT,
+            Util.TIME_CARD_LIST
+        );
         invoiceClient.run();
     }
 }

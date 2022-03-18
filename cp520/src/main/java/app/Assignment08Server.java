@@ -1,10 +1,8 @@
 package app;
 
-
 import edu.uw.cp520.scg.net.server.InvoiceServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 
 /**
  * The server application for assignment 08, create an InvoiceServer instance and starts it.
@@ -12,6 +10,7 @@ import org.slf4j.LoggerFactory;
  * @author Jesse Ruth
  */
 public class Assignment08Server {
+
     /**
      * Da Logger
      */
@@ -30,7 +29,12 @@ public class Assignment08Server {
      */
     public static void main(String[] args) throws Exception {
         log.info("Start Assignment08Server");
-        InvoiceServer invoiceServer = new InvoiceServer(DEFAULT_PORT, Util.ACCOUNT_LIST, Util.CONSULTANT_LIST, "target/invoices");
+        InvoiceServer invoiceServer = new InvoiceServer(
+            DEFAULT_PORT,
+            Util.ACCOUNT_LIST,
+            Util.CONSULTANT_LIST,
+            "target/invoices"
+        );
         invoiceServer.run();
     }
 }

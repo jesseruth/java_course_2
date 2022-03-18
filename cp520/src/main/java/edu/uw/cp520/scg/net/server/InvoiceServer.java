@@ -1,17 +1,15 @@
 package edu.uw.cp520.scg.net.server;
 
-
 import edu.uw.cp520.scg.domain.ClientAccount;
 import edu.uw.cp520.scg.domain.Consultant;
 import edu.uw.cp520.scg.net.cmd.Command;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The server for creating new clients, consultants and time cards as well as creation of account invoices. Maintains
@@ -20,6 +18,7 @@ import java.util.List;
  * @author Jesse Ruth
  */
 public class InvoiceServer {
+
     /**
      * Da Logger
      */
@@ -51,10 +50,12 @@ public class InvoiceServer {
      * @param consultantList      the initial list of consultants
      * @param outputDirectoryName the directory to be used for files output by commands
      */
-    public InvoiceServer(final int port,
-                         final List<ClientAccount> clientList,
-                         final List<Consultant> consultantList,
-                         final String outputDirectoryName) {
+    public InvoiceServer(
+        final int port,
+        final List<ClientAccount> clientList,
+        final List<Consultant> consultantList,
+        final String outputDirectoryName
+    ) {
         this.port = port;
         this.clientList = clientList;
         this.consultantList = consultantList;
@@ -85,9 +86,16 @@ public class InvoiceServer {
 
     private void process(final Socket sock) {
         log.info("process a socket");
-        try (InputStream inStrm = sock.getInputStream();
-             ObjectInputStream ois = new ObjectInputStream(inStrm)) {
-            CommandProcessor commandProcessor = new CommandProcessor(sock, clientList, consultantList, this);
+        try (
+            InputStream inStrm = sock.getInputStream();
+            ObjectInputStream ois = new ObjectInputStream(inStrm)
+        ) {
+            CommandProcessor commandProcessor = new CommandProcessor(
+                sock,
+                clientList,
+                consultantList,
+                this
+            );
             while (!sock.isClosed()) {
                 final Object obj = ois.readObject();
                 if (obj == null) {

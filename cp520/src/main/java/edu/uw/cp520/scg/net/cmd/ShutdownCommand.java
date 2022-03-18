@@ -1,6 +1,5 @@
 package edu.uw.cp520.scg.net.cmd;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +35,5 @@ public final class ShutdownCommand extends AbstractCommand<Void> {
     public void execute() {
         log.info("execute ShutdownCommand");
         this.getReceiver().execute(this);
-
     }
 }

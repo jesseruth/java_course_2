@@ -1,6 +1,5 @@
 package edu.uw.cp520.scg.net.cmd;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -10,6 +9,7 @@ import org.slf4j.LoggerFactory;
  * @author Jesse Ruth
  */
 public final class DisconnectCommand extends AbstractCommand<Void> {
+
     /**
      * Serial Version id.
      **/
@@ -34,6 +34,5 @@ public final class DisconnectCommand extends AbstractCommand<Void> {
     public void execute() {
         log.info("execute DisconnectCommand");
         this.getReceiver().execute(this);
-
     }
 }

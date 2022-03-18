@@ -1,7 +1,6 @@
 package edu.uw.cp520.scg.net.cmd;
 
 import edu.uw.cp520.scg.net.server.CommandProcessor;
-
 import java.io.Serializable;
 
 /**
@@ -11,6 +10,7 @@ import java.io.Serializable;
  * @author Jesse Ruth
  */
 public abstract class AbstractCommand<T> implements Command<T>, Serializable {
+
     /**
      * Command Target
      **/
@@ -24,8 +24,7 @@ public abstract class AbstractCommand<T> implements Command<T>, Serializable {
     /**
      * Construct an AbstractCommand without a target; called from subclasses.
      */
-    public AbstractCommand() {
-    }
+    public AbstractCommand() {}
 
     /**
      * Construct an AbstractCommand with a target; called from subclasses.
