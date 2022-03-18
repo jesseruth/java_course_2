@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,23 +58,24 @@ public class InvoiceServer {
         final String outputDirectoryName
     ) {
         this.port = port;
-        this.clientList = clientList;
-        this.consultantList = consultantList;
+        this.clientList = Collections.synchronizedList(clientList);
+        this.consultantList = Collections.synchronizedList(consultantList);
         this.outputDirectoryName = outputDirectoryName;
     }
 
     /**
      * Run this server, establishing connections, receiving commands, and dispatching them to the CommandProcesser.
      */
-    public void run() {
+    public void startServer() {
         try (ServerSocket listenSocket = new ServerSocket(port);) {
             servSock = listenSocket;
             log.info("Server ready on port {}", port);
 
             while (!servSock.isClosed()) {
                 log.info("Waiting for new connection");
-                try (Socket sock = servSock.accept()) {
+                try {
                     log.info("New connection, processing socket");
+                    Socket sock = servSock.accept();
                     process(sock);
                 } catch (final SocketException s) {
                     log.error("Server socket closed", s);
@@ -86,33 +88,14 @@ public class InvoiceServer {
 
     private void process(final Socket sock) {
         log.info("process a socket");
-        try (
-            InputStream inStrm = sock.getInputStream();
-            ObjectInputStream ois = new ObjectInputStream(inStrm)
-        ) {
-            CommandProcessor commandProcessor = new CommandProcessor(
+        CommandProcessor commandProcessor = new CommandProcessor(
                 sock,
                 clientList,
                 consultantList,
                 this
-            );
-            while (!sock.isClosed()) {
-                final Object obj = ois.readObject();
-                if (obj == null) {
-                    sock.close();
-                } else if (obj instanceof Command<?>) {
-                    final Command<?> command = (Command<?>) obj;
-                    log.info("Command Class decoded {}", command);
-                    commandProcessor.setOutPutDirectoryName(this.outputDirectoryName);
-                    command.setReceiver(commandProcessor);
-                    command.execute();
-                } else {
-                    log.info("Invalid command {}", obj.getClass().getSimpleName());
-                }
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            log.error("Server error", e);
-        }
+        );
+        Thread thread = new Thread(commandProcessor);
+        thread.start();
     }
 
     /**

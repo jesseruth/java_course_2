@@ -1,0 +1,73 @@
+The Small Consulting Group
+1616 Index Ct.
+Renton, WA 98058
+
+Invoice for:
+FooBar Enterprises
+1024 Kilobyte Dr.
+Silicone Gulch, CA 94105
+
+Invoice For Month of: March 2017
+Invoice Date: March 18, 2022
+
+Date        Consultant                   Skill                Hours  Charge
+----------  ---------------------------  ------------------   -----  ----------
+2017-03-01  Carl, Coder NMN              Engineer skill           8    1,200.00
+2017-03-02  Carl, Coder NMN              Engineer skill           8    1,200.00
+2017-03-03  Carl, Coder NMN              Engineer skill           8    1,200.00
+2017-03-08  Carl, Coder NMN              Engineer skill           8    1,200.00
+2017-03-09  Carl, Coder NMN              Engineer skill          12    1,800.00
+
+
+
+The Small Consulting Group                                            Page:   1
+===============================================================================
+The Small Consulting Group
+1616 Index Ct.
+Renton, WA 98058
+
+Invoice for:
+FooBar Enterprises
+1024 Kilobyte Dr.
+Silicone Gulch, CA 94105
+
+Invoice For Month of: March 2017
+Invoice Date: March 18, 2022
+
+Date        Consultant                   Skill                Hours  Charge
+----------  ---------------------------  ------------------   -----  ----------
+2017-03-06  S., Architect Ann            Architect skill          8    1,600.00
+2017-03-08  S., Architect Ann            Architect skill          8    1,600.00
+2017-03-09  S., Architect Ann            Architect skill          8    1,600.00
+2017-03-10  S., Architect Ann            Architect skill          8    1,600.00
+2017-03-11  S., Architect Ann            Architect skill          8    1,600.00
+
+
+
+The Small Consulting Group                                            Page:   2
+===============================================================================
+The Small Consulting Group
+1616 Index Ct.
+Renton, WA 98058
+
+Invoice for:
+FooBar Enterprises
+1024 Kilobyte Dr.
+Silicone Gulch, CA 94105
+
+Invoice For Month of: March 2017
+Invoice Date: March 18, 2022
+
+Date        Consultant                   Skill                Hours  Charge
+----------  ---------------------------  ------------------   -----  ----------
+2017-03-13  S., Architect Ann            Architect skill          8    1,600.00
+2017-03-14  S., Architect Ann            Architect skill          8    1,600.00
+2017-03-17  S., Architect Ann            Architect skill          8    1,600.00
+
+Total:                                                          108   19,400.00
+
+
+
+The Small Consulting Group                                            Page:   3
+===============================================================================
+

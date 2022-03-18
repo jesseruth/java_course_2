@@ -5,11 +5,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The server application for assignment 08, create an InvoiceServer instance and starts it.
+ * The server application for assignment 09, create an InvoiceServer instance and starts it.
  *
  * @author Jesse Ruth
  */
-public class Assignment08Server {
+public class Assignment09Server {
 
     /**
      * Da Logger
@@ -30,10 +30,10 @@ public class Assignment08Server {
     public static void main(String[] args) throws Exception {
         log.info("Start Assignment08Server");
         InvoiceServer invoiceServer = new InvoiceServer(
-            DEFAULT_PORT,
-            Util.ACCOUNT_LIST,
-            Util.CONSULTANT_LIST,
-            "target/invoices"
+                DEFAULT_PORT,
+                Util.ACCOUNT_LIST,
+                Util.CONSULTANT_LIST,
+                "target/invoices"
         );
         invoiceServer.startServer();
     }
