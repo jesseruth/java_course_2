@@ -89,10 +89,10 @@ public class InvoiceServer {
     private void process(final Socket sock) {
         log.info("process a socket");
         CommandProcessor commandProcessor = new CommandProcessor(
-                sock,
-                clientList,
-                consultantList,
-                this
+            sock,
+            clientList,
+            consultantList,
+            this
         );
         Thread thread = new Thread(commandProcessor);
         thread.start();

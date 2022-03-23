@@ -1,10 +1,11 @@
 package app;
 
+import edu.uw.cp520.scg.domain.TimeCard;
 import edu.uw.cp520.scg.net.client.InvoiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -32,18 +33,21 @@ public class Assignment09 {
      */
     public static void main(String[] args) throws Exception {
         log.info("Running Assignment08 Client");
-
+        final List<TimeCard> timeCardList = Collections.unmodifiableList(Util.TIME_CARD_LIST);
         for (int threadCount = 10; threadCount > 0; threadCount--) {
             Thread thread = new Thread(() -> {
                 InvoiceClient invoiceClient = new InvoiceClient(
-                        LOCAL_HOST,
-                        Assignment08Server.DEFAULT_PORT,
-                        Util.TIME_CARD_LIST
+                    LOCAL_HOST,
+                    Assignment08Server.DEFAULT_PORT,
+                    timeCardList
                 );
                 invoiceClient.run();
             });
             thread.setName(String.format("Start ThreadNumber: %s", threadCount));
             thread.start();
+            thread.join();
         }
+
+        InvoiceClient.sendShutdown(LOCAL_HOST, Assignment08Server.DEFAULT_PORT);
     }
 }

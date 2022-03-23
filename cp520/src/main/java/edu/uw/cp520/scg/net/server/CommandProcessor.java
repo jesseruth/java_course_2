@@ -5,17 +5,13 @@ import edu.uw.cp520.scg.domain.Consultant;
 import edu.uw.cp520.scg.domain.Invoice;
 import edu.uw.cp520.scg.domain.TimeCard;
 import edu.uw.cp520.scg.net.cmd.*;
-import edu.uw.ext.util.ListFactory;
-
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,15 +67,15 @@ public final class CommandProcessor implements Runnable {
      * @param server         the server that created this command processor
      */
     public CommandProcessor(
-            final Socket connection,
-            final List<ClientAccount> clientList,
-            final List<Consultant> consultantList,
-            final InvoiceServer server
+        final Socket connection,
+        final List<ClientAccount> clientList,
+        final List<Consultant> consultantList,
+        final InvoiceServer server
     ) {
         log.info("Create new command processor");
         this.connection = connection;
-        this.clientList = Collections.synchronizedList(clientList);
-        this.consultantList = Collections.synchronizedList(consultantList);
+        this.clientList = clientList;
+        this.consultantList = consultantList;
         this.server = server;
     }
 
@@ -88,7 +84,7 @@ public final class CommandProcessor implements Runnable {
      *
      * @param outPutDirectoryName the output directory name.
      */
-    public void setOutPutDirectoryName(String outPutDirectoryName) {
+    public void setOutPutDirectoryName(final String outPutDirectoryName) {
         log.debug("Update setOutPutDirectoryName {}", outPutDirectoryName);
         this.outPutDirectoryName = outPutDirectoryName;
     }
@@ -98,7 +94,7 @@ public final class CommandProcessor implements Runnable {
      *
      * @param command the command to execute.
      */
-    public void execute(AddTimeCardCommand command) {
+    public void execute(final AddTimeCardCommand command) {
         log.info("Execute AddTimeCardCommand");
         log.info("Total timecards: {}", timeCardList.size());
         timeCardList.add(command.getTarget());
@@ -110,10 +106,14 @@ public final class CommandProcessor implements Runnable {
      *
      * @param command the command to execute.
      */
-    public void execute(AddClientCommand command) {
+    public void execute(final AddClientCommand command) {
         log.info("Execute AddTimeCardCommand");
         log.info("Total clients: {}", clientList.size());
-        clientList.add(command.getTarget());
+        synchronized (clientList) {
+            if (!clientList.contains(command.getTarget())) {
+                clientList.add(command.getTarget());
+            }
+        }
         log.info("New clients: {}", clientList.size());
     }
 
@@ -122,10 +122,14 @@ public final class CommandProcessor implements Runnable {
      *
      * @param command the command to execute.
      */
-    public void execute(AddConsultantCommand command) {
+    public void execute(final AddConsultantCommand command) {
         log.info("Execute AddConsultantCommand");
         log.info("Total consultants: {}", consultantList.size());
-        consultantList.add(command.getTarget());
+        synchronized (consultantList) {
+            if (!consultantList.contains(command.getTarget())) {
+                consultantList.add(command.getTarget());
+            }
+        }
         log.info("New consultants: {}", consultantList.size());
     }
 
@@ -134,17 +138,17 @@ public final class CommandProcessor implements Runnable {
      *
      * @param command the command to execute.
      */
-    public void execute(CreateInvoicesCommand command) {
-        LocalDate invoiceDate = command.getTarget();
+    public void execute(final CreateInvoicesCommand command) {
+        final LocalDate invoiceDate = command.getTarget();
         final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
-                "MMMMyyyy"
+            "MMMMyyyy"
         );
         final String monthString = dateTimeFormatter.format(invoiceDate);
         log.info("Execute CreateInvoicesCommand");
 
         log.info("Running Assignment 07");
 
-        List<Invoice> invoices = new ArrayList<>(clientList.size());
+        final List<Invoice> invoices = new ArrayList<>(clientList.size());
 
         log.info("Looping through clients to make invoices");
 
@@ -153,9 +157,9 @@ public final class CommandProcessor implements Runnable {
                 log.info("Client: {}", clientAccount.getName());
 
                 Invoice invoice = new Invoice(
-                        clientAccount,
-                        invoiceDate.getMonth(),
-                        invoiceDate.getYear()
+                    clientAccount,
+                    invoiceDate.getMonth(),
+                    invoiceDate.getYear()
                 );
                 invoices.add(invoice);
                 for (final TimeCard timeCard : timeCardList) {
@@ -171,15 +175,15 @@ public final class CommandProcessor implements Runnable {
                         }
                     }
                     final String fileName = String.format(
-                            "%s%sInvoice.txt",
-                            clientAccount.getName().replaceAll(" ", ""),
-                            monthString
+                        "%s%sInvoice.txt",
+                        clientAccount.getName().replaceAll(" ", ""),
+                        monthString
                     );
                     final File outputFile = new File(outPutDirectoryName, fileName);
                     try (
-                            PrintStream printStream = new PrintStream(
-                                    new FileOutputStream(outputFile)
-                            )
+                        PrintStream printStream = new PrintStream(
+                            new FileOutputStream(outputFile)
+                        )
                     ) {
                         printStream.println(invoice.toReportString());
                     } catch (FileNotFoundException e) {
@@ -188,35 +192,34 @@ public final class CommandProcessor implements Runnable {
                 }
             }
         }
-
-//        if (PRINT_INVOICES = true) {
-//            // Use the list util methods
-//            Console console = System.console();
-//            PrintWriter consoleWrtr = null;
-//            try {
-//                consoleWrtr =
-//                        (console != null)
-//                                ? console.writer()
-//                                : new PrintWriter(new OutputStreamWriter(System.out, ENCODING), true);
-//            } catch (UnsupportedEncodingException e) {
-//                e.printStackTrace();
-//            }
-//
-//            // Create the Invoices
-//            // Print them
-//            consoleWrtr.println();
-//            consoleWrtr.println(
-//                    "=================================================================================="
-//            );
-//            consoleWrtr.println(
-//                    "=============================== I N V O I C E S =================================="
-//            );
-//            consoleWrtr.println(
-//                    "=================================================================================="
-//            );
-//            consoleWrtr.println();
-//            ListFactory.printInvoices(invoices, consoleWrtr);
-//        }
+        //        if (PRINT_INVOICES = true) {
+        //            // Use the list util methods
+        //            Console console = System.console();
+        //            PrintWriter consoleWrtr = null;
+        //            try {
+        //                consoleWrtr =
+        //                        (console != null)
+        //                                ? console.writer()
+        //                                : new PrintWriter(new OutputStreamWriter(System.out, ENCODING), true);
+        //            } catch (UnsupportedEncodingException e) {
+        //                e.printStackTrace();
+        //            }
+        //
+        //            // Create the Invoices
+        //            // Print them
+        //            consoleWrtr.println();
+        //            consoleWrtr.println(
+        //                    "=================================================================================="
+        //            );
+        //            consoleWrtr.println(
+        //                    "=============================== I N V O I C E S =================================="
+        //            );
+        //            consoleWrtr.println(
+        //                    "=================================================================================="
+        //            );
+        //            consoleWrtr.println();
+        //            ListFactory.printInvoices(invoices, consoleWrtr);
+        //        }
     }
 
     /**
@@ -258,8 +261,8 @@ public final class CommandProcessor implements Runnable {
         final String threadName = Thread.currentThread().getName();
         log.info("RUUUUUNNNNNN FOREST, RUN!!!!!! Thread: {}", threadName);
         try (
-                InputStream inStrm = connection.getInputStream();
-                ObjectInputStream ois = new ObjectInputStream(inStrm)
+            InputStream inStrm = connection.getInputStream();
+            ObjectInputStream ois = new ObjectInputStream(inStrm)
         ) {
             while (!connection.isClosed()) {
                 final Object obj = ois.readObject();
@@ -268,7 +271,9 @@ public final class CommandProcessor implements Runnable {
                 } else if (obj instanceof Command<?>) {
                     final Command<?> command = (Command<?>) obj;
                     log.info("Command Class decoded {}", command);
-                    setOutPutDirectoryName(String.format("target/invoices/%s", threadName));
+                    setOutPutDirectoryName(
+                        String.format("target/invoices/%s", threadName)
+                    );
                     command.setReceiver(this);
                     command.execute();
                 } else {
@@ -281,7 +286,11 @@ public final class CommandProcessor implements Runnable {
         } catch (IOException e) {
             log.error("IOException! Thread: {}", Thread.currentThread().getName(), e);
         } catch (ClassNotFoundException e) {
-            log.error("ClassNotFoundException! Thread: {}", Thread.currentThread().getName(), e);
+            log.error(
+                "ClassNotFoundException! Thread: {}",
+                Thread.currentThread().getName(),
+                e
+            );
         }
     }
 }

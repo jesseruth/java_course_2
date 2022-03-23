@@ -30,10 +30,10 @@ public class Assignment09Server {
     public static void main(String[] args) throws Exception {
         log.info("Start Assignment08Server");
         InvoiceServer invoiceServer = new InvoiceServer(
-                DEFAULT_PORT,
-                Util.ACCOUNT_LIST,
-                Util.CONSULTANT_LIST,
-                "target/invoices"
+            DEFAULT_PORT,
+            Util.ACCOUNT_LIST,
+            Util.CONSULTANT_LIST,
+            "target/invoices"
         );
         invoiceServer.startServer();
     }
